@@ -7,17 +7,28 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  familyname: {
+    type: String,
+    required: false
+  },
   email: {
     type: String,
     required: true
   },
+  profilePicture: {
+    type: String,
+    required: false
+  },
   password: {
     type: String,
-    required: true
+    required: false
   },
   date: {
     type: Date,
     default: Date.now
+  },
+  google: {
+    googleId: { type: String, required: false }
   }
 });
 

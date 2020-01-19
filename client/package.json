@@ -5,6 +5,10 @@
   "dependencies": {
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
+    "headroom.js": "0.9.4",
+    "nouislider": "13.1.5",
+    "react-datetime": "2.16.3",
+    "moment": "2.24.0",
     "jwt-decode": "^2.2.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
@@ -12,7 +16,8 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "reactstrap": "8.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -64,6 +64,10 @@ class Login extends Component {
               <h4>
                 <b>Login</b> below
               </h4>
+              <a href="http://localhost:5000/api/users/google">
+                {/* <GoogleButton /> */}
+                This is the google button
+              </a>
               <p className="grey-text text-darken-1">
                 Don't have an account? <Link to="/register">Register</Link>
               </p>
@@ -136,7 +140,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(
-  mapStateToProps,
-  { loginUser }
-)(Login);
+export default connect(mapStateToProps, { loginUser })(Login);

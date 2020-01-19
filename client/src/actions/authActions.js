@@ -1,7 +1,7 @@
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
-
+import store from "./../store";
 import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
 
 // Register User
@@ -37,9 +37,25 @@ export const loginUser = userData => dispatch => {
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
-        payload: err.response.data
+        payload: err.response
       })
     );
+};
+
+// Used to set a JWT after OAuth
+export const setJWTtoken = raw_token => {
+  console.log("Decoding token");
+  if (raw_token !== undefined) {
+    let token = "Bearer " + raw_token;
+    localStorage.setItem("jwtToken", token);
+    // Set token to Auth header
+    setAuthToken(token);
+    // Decode token to get user data
+    const decoded = jwt_decode(token);
+    console.log(decoded);
+    // Set current user
+    store.dispatch(setCurrentUser(decoded));
+  }
 };
 
 // Set logged in user

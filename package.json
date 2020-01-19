@@ -16,12 +16,17 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "concurrently": "^4.0.1",
+    "dotenv": "^8.2.0",
     "express": "^4.16.4",
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.3.11",
+    "node-sass": "^4.13.1",
     "passport": "^0.4.0",
+    "passport-google-oauth": "^2.0.0",
     "passport-jwt": "^4.0.0",
+    "query-string": "^6.10.1",
+    "react-cookies": "^0.1.1",
     "validator": "^10.9.0"
   }
 }
