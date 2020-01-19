@@ -13,7 +13,8 @@ import Login from "./components/auth/Login";
 
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard";
-
+import Profile from "./components/dashboard/Profile";
+import FlashAlert from "./components/layout/FlashAlert";
 // Check for token to keep user logged in
 if (localStorage.jwtToken && localStorage.jwtToken !== "Bearer null") {
   // Set auth token header auth
@@ -51,11 +52,12 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className="App">
+            <FlashAlert />
             <Route exact path="/" component={Landing} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Switch>
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/dashboard" component={Profile} />
             </Switch>
           </div>
         </Router>
@@ -63,4 +65,5 @@ class App extends Component {
     );
   }
 }
+
 export default App;
