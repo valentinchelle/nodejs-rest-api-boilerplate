@@ -112,6 +112,9 @@ exports.getById = (req, res) => {
 };
 
 exports.patchById = (req, res) => {
+  // We make sure to not patch the permissionLevel and id
+  delete req.body["permissionLevel"];
+  delete req.body["id"];
   if (req.body.password) {
     // Hash password before saving in database
     bcrypt.genSalt(10, (err, salt) => {

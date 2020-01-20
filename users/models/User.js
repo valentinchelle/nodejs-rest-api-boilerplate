@@ -39,7 +39,9 @@ const userSchema = new Schema({
   OAuthId: {
     type: String,
     required: false
-  }
+  },
+
+  permissionLevel: Number
 });
 
 const Model = mongoose.model("Users", userSchema);
@@ -80,6 +82,9 @@ exports.list = (perPage, page) => {
 };
 
 exports.patch = (id, userData) => {
+  delete userData["permissionLevel"];
+  delete userData["id"];
+  // needs to Ensure no collision
   return new Promise((resolve, reject) => {
     Model.findById(id, function(err, user) {
       if (err) reject(err);

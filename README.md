@@ -30,6 +30,7 @@ Please make sure that you have:
 - [ ] Delete Account
 - [x] OAuth 2.0 Authentication via Facebook, Google
 - [x] Easy-to-use endpoints
+- [ ] Middlewares to ensure authentification and permission to access resources.
 
 # Usage
 
@@ -73,6 +74,10 @@ The global logic for an app calling this rest API :
 The app will call an API route ( like `url/api/users/modifyuser` ). The router makes the request pass through the middleware (`isConnected()`) towards the controller action (`modifyUser()`). The controller action will then call the model to modify a record in the table.
 
 ## Api Endpoints
+
+| Endpoint           | Token Needed | Description                   |
+| ------------------ | ------------ | ----------------------------- |
+| `/api/users/users` | yes          | Returns the list of the users |
 
 ### `localhost:3600/users` : Insert a new user
 
@@ -128,6 +133,10 @@ This will be required for every route with the middleware `ValidationMiddleware.
     UsersController.patchById
   ]);
 ```
+
+# Security Concerns
+
+At the end of the OAuth, the jwt is sent via a get request to the front end, so it could possibly appear in the history/logs of the server...
 
 # References
 
