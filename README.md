@@ -1,6 +1,6 @@
 # NodeJs Api Boilerplate
 
-A boilerplate for **NodeJs** Rest Api.
+A boilerplate for **NodeJs** Rest Api. with a ReactJS client example. Implements Classic Auth, 0Auth (Google Login, Facebook Login).
 
 You probably know how hard it is to start a node js API, with a well structured and clean code. Especially if you are on a rush for an hackhaton or a school project.
 I give you here a clean code, that implements what essential for a new API project : a clean nodejs structure implementing a User System following the best practices.
@@ -13,7 +13,8 @@ You can directly plug this API with the front end of your choice by calling the 
 - node.js installed (https://nodejs.org/)
 - have mongodb installed and running locally (https://www.mongodb.com/)
   - Using Windows, just open the terminal at where you installed mongo and run `mongod.exe`
-- run npm install in your root project folder
+- run `npm install` in your root project folder
+- if you want to use the react
 
 # Features
 
@@ -26,8 +27,8 @@ You can directly plug this API with the front end of your choice by calling the 
 - [ ] Forgot Password
 - [ ] Reset Password
 - [ ] Delete Account
-- [ ] OAuth 2.0 Authentication via Facebook, Google
-- [ ] Easy-to-use endpoints
+- [x] OAuth 2.0 Authentication via Facebook, Google
+- [x] Easy-to-use endpoints
 
 # Usage
 
