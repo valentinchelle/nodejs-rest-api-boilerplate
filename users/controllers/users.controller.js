@@ -117,28 +117,25 @@ exports.patchById = (req, res) => {
   delete req.body["id"];
   console.log(req.jwt);
   // We make sure they try to modify themselves if they don't have the right permission
-  if (req.params.userId == req.jwt.id || req.jwt.permissionLevel > 3) {
-    var newUser = req.body;
-    if (req.body.password) {
-      // Hash password before saving in database
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw err;
-          newUser.password = hash;
 
-          UserModel.patch(req.params.userId, newUser).then(result => {
-            console.log(result);
-            res.status(204).send({});
-          });
+  var newUser = req.body;
+  if (req.body.password) {
+    // Hash password before saving in database
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(newUser.password, salt, (err, hash) => {
+        if (err) throw err;
+        newUser.password = hash;
+
+        UserModel.patch(req.params.userId, newUser).then(result => {
+          console.log(result);
+          res.status(204).send({});
         });
       });
-    } else {
-      UserModel.patch(req.params.userId, req.body).then(result => {
-        console.log(result);
-        res.status(204).send({});
-      });
-    }
+    });
   } else {
-    res.status(403).send();
+    UserModel.patch(req.params.userId, req.body).then(result => {
+      console.log(result);
+      res.status(204).send({});
+    });
   }
 };

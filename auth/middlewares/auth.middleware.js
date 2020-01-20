@@ -33,7 +33,7 @@ exports.validJWTNeeded = (req, res, next) => {
       if (authorization[0] !== "Bearer") {
         return res.status(403).send();
       } else {
-        console.log("verifying jwt");
+        console.log("Verifying jwt");
         req.jwt = jwt.verify(authorization[1], process.env.JWT_SECRET);
         return next();
       }

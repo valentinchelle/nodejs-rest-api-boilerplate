@@ -82,6 +82,13 @@ The app will call an API route ( like `url/api/users/modifyuser` ). The router m
 | `GET /api/users/`      | yes          |                 | Returns the list of the users         |
 | `PATCH /api/users/:id` | yes          | {name : "John"} | Update the user with the body request |
 
+## Routes Middlewares
+
+| Name                               | Path                            | Description                      |
+| ---------------------------------- | ------------------------------- | -------------------------------- |
+| onlySameUserOrAdminCanDoThisAction | `users/middlewares/permissions` | for actions like editing profile |
+| validJWTNeeded                     | `auth/middlewares/auth`         | Make sure the user is logged     |
+
 ### `localhost:3600/users` : Insert a new user
 
 Request Body :
