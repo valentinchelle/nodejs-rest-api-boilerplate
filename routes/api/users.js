@@ -70,7 +70,7 @@ router.post("/login", (req, res) => {
   User.findOne({ email }).then(user => {
     // Check if user exists
     if (!user) {
-      return res.status(404).json({ emailnotfound: "Email not found" });
+      return res.status(404).json({ auth: "Email not found" });
     }
 
     // Check password
@@ -99,9 +99,7 @@ router.post("/login", (req, res) => {
           }
         );
       } else {
-        return res
-          .status(400)
-          .json({ passwordincorrect: "Password incorrect" });
+        return res.status(400).json({ auth: "Password incorrect" });
       }
     });
   });
@@ -121,8 +119,6 @@ router.get("/google/callback", function(req, res, next) {
     if (!user) {
       return res.redirect("/login");
     }
-    console.log("sdfasdfsdf");
-    console.log(req.body);
     // User matched
     // Create JWT Payload
     const payload = {
@@ -139,7 +135,6 @@ router.get("/google/callback", function(req, res, next) {
         expiresIn: 31556926 // 1 year in seconds
       },
       (err, token) => {
-        console.log(token);
         return res
           .cookie("jwt", token, { httpOnly: true })
           .redirect(`http://localhost:3000/?token=${token}`);

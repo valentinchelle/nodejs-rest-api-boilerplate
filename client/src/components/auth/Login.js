@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
 import classnames from "classnames";
+import { Alert } from "reactstrap";
 // reactstrap components
 import {
   Button,
@@ -129,6 +130,10 @@ class Login extends React.Component {
                     <CardBody className="px-lg-5 py-lg-5">
                       <div className="text-center text-muted mb-4">
                         <small>Or sign in with credentials</small>
+
+                        {errors.auth && (
+                          <Alert color="warning">{errors.auth}</Alert>
+                        )}
                       </div>
                       <Form role="form" noValidate onSubmit={this.onSubmit}>
                         <FormGroup className="mb-3">
@@ -138,10 +143,6 @@ class Login extends React.Component {
                                 <i className="ni ni-email-83" />
                               </InputGroupText>
                             </InputGroupAddon>
-                            <span className="red-text">
-                              {errors.email}
-                              {errors.emailnotfound}
-                            </span>
                             <Input
                               placeholder="Email"
                               type="email"

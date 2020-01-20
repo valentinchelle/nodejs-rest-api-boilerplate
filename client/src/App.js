@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import Landing from "./views/examples/Landing";
-import Register from "./components/auth/Register";
+import Register from "./components/auth/Register.jsx";
 import Login from "./components/auth/Login";
 
 import PrivateRoute from "./components/private-route/PrivateRoute";
