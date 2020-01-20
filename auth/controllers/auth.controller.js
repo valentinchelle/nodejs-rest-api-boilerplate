@@ -33,7 +33,7 @@ exports.loginUser = (req, res) => {
   const password = req.body.password;
 
   // Find user by email
-  User.findOne({ email }).then(user => {
+  User.model.findOne({ email }).then(user => {
     // Check if user exists
     if (!user) {
       return res.status(404).json({ auth: "Email not found" });
@@ -123,7 +123,7 @@ exports.loginFacebook = (req, res, next) => {
       payload,
       process.env.JWT_SECRET,
       {
-        expiresIn: 31556926 // 1 year in seconds
+        expiresIn: 60 * 60 // 1 hour in seconds
       },
       (err, token) => {
         return res

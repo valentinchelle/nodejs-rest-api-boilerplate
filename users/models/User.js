@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create Schema
-const UserSchema = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true
@@ -44,6 +44,7 @@ const UserSchema = new Schema({
 
 const Model = mongoose.model("Users", userSchema);
 
+exports.model = Model;
 // General Function for a model
 exports.findByEmail = email => {
   return Model.find({ email: email });
@@ -104,5 +105,3 @@ exports.removeById = userId => {
     });
   });
 };
-
-module.exports = User = mongoose.model("users", UserSchema);

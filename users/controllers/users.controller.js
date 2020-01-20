@@ -1,5 +1,4 @@
 const UserModel = require("../models/User");
-const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 
 exports.insert = (req, res) => {
@@ -20,7 +19,7 @@ exports.insert = (req, res) => {
           if (err) throw err;
           newUser.password = hash;
           // Calling the model to create the user
-          UserModel.createUser(newUser)
+          UserModel.create(newUser)
             .then(user => {
               console.log("[i] User Created!");
               res.json(user);
@@ -77,7 +76,7 @@ exports.loginOAuth = (
           profilePicture: picture,
           email: email
         });
-        UserModel.createUser(newUser0Auth)
+        UserModel.create(newUser0Auth)
           .then(user => {
             console.log("[i] User Created!");
             cb_success(user);
@@ -100,6 +99,7 @@ exports.list = (req, res) => {
       page = Number.isInteger(req.query.page) ? req.query.page : 0;
     }
   }
+  console.log(UserModel.list);
   UserModel.list(limit, page).then(result => {
     res.status(200).send(result);
   });
