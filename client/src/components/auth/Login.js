@@ -105,10 +105,10 @@ class Login extends React.Component {
                           <span className="btn-inner--icon mr-1">
                             <img
                               alt="..."
-                              src={require("../../assets/img/icons/common/github.svg")}
+                              src={require("../../assets/img/icons/common/facebook.svg")}
                             />
                           </span>
-                          <span className="btn-inner--text">Github</span>
+                          <span className="btn-inner--text">Facebook</span>
                         </Button>
                         <Button
                           className="btn-neutral btn-icon ml-1"
