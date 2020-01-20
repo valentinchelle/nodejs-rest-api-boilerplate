@@ -28,6 +28,8 @@ Please make sure that you have:
 - [ ] Forgot Password
 - [ ] Reset Password
 - [ ] Delete Account
+- [x] List Entity
+- [ ] Patch Entity : modify your entity
 - [x] OAuth 2.0 Authentication via Facebook, Google
 - [x] Easy-to-use endpoints
 - [ ] Middlewares to ensure authentification and permission to access resources.
