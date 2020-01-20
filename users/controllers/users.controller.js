@@ -115,22 +115,30 @@ exports.patchById = (req, res) => {
   // We make sure to not patch the permissionLevel and id
   delete req.body["permissionLevel"];
   delete req.body["id"];
-  if (req.body.password) {
-    // Hash password before saving in database
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(newUser.password, salt, (err, hash) => {
-        if (err) throw err;
-        newUser = req.body;
-        newUser.password = hash;
+  console.log(req.jwt);
+  // We make sure they try to modify themselves if they don't have the right permission
+  if (req.params.userId == req.jwt.id || req.jwt.permissionLevel > 3) {
+    var newUser = req.body;
+    if (req.body.password) {
+      // Hash password before saving in database
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err;
+          newUser.password = hash;
 
-        UserModel.patch(req.params.userId, newUser).then(result => {
-          res.status(204).send({});
+          UserModel.patch(req.params.userId, newUser).then(result => {
+            console.log(result);
+            res.status(204).send({});
+          });
         });
       });
-    });
+    } else {
+      UserModel.patch(req.params.userId, req.body).then(result => {
+        console.log(result);
+        res.status(204).send({});
+      });
+    }
   } else {
-    UserModel.patch(req.params.userId, req.body).then(result => {
-      res.status(204).send({});
-    });
+    res.status(403).send();
   }
 };

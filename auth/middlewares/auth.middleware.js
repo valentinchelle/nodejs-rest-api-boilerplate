@@ -35,7 +35,6 @@ exports.validJWTNeeded = (req, res, next) => {
       } else {
         console.log("verifying jwt");
         req.jwt = jwt.verify(authorization[1], process.env.JWT_SECRET);
-        console.log(req.jwt);
         return next();
       }
     } catch (err) {
