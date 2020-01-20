@@ -35,6 +35,7 @@ exports.loginOAuth = (
   familyName,
   provider,
   id_provider,
+  picture = "",
   cb_success,
   cb_fail
 ) => {
@@ -48,7 +49,7 @@ exports.loginOAuth = (
   // We lookup if already exist
   console.log("[i] Login via Oauth");
   User.findOne(
-    { OAuthId: id_provider, OAuthProvider: provider },
+    { OAuthId: id_provider, OAuthProvider: provider, email: email },
     (err, userMatch) => {
       // handle errors here:
       if (err) {
@@ -60,15 +61,17 @@ exports.loginOAuth = (
         console.log("[i] User Found!");
         cb_success(userMatch);
       } else {
+        console.log("[i] Creating new user");
         // creating the new user
         const newUser0Auth = new User({
           OAuthProvider: provider,
           OAuthId: id_provider,
           name: name,
-          familyName: familyName,
-          //profilePicture: profile_json.picture,
+          familyname: familyName,
+          profilePicture: picture,
           email: email
         });
+        console.log(newUser0Auth);
         newUser0Auth
           .save()
           .then(user => {
