@@ -73,7 +73,6 @@ class Login extends React.Component {
 
   render() {
     const { errors } = this.state;
-    console.log(errors);
     return (
       <>
         <DemoNavbar />
@@ -128,13 +127,13 @@ class Login extends React.Component {
                       </div>
                     </CardHeader>
                     <CardBody className="px-lg-5 py-lg-5">
-                      <div className="text-center text-muted mb-4">
-                        <small>Or sign in with credentials</small>
-
-                        {errors.auth && (
-                          <Alert color="warning">{errors.auth}</Alert>
-                        )}
-                      </div>
+                      {errors && errors.auth ? (
+                        <Alert color="warning">{errors.auth}</Alert>
+                      ) : (
+                        <div className="text-center text-muted mb-4">
+                          <small>Or sign in with credentials</small>
+                        </div>
+                      )}
                       <Form role="form" noValidate onSubmit={this.onSubmit}>
                         <FormGroup className="mb-3">
                           <InputGroup className="input-group-alternative">
@@ -214,13 +213,9 @@ class Login extends React.Component {
                       </a>
                     </Col>
                     <Col className="text-right" xs="6">
-                      <a
-                        className="text-light"
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
-                      >
+                      <Link to="/register">
                         <small>Create new account</small>
-                      </a>
+                      </Link>
                     </Col>
                   </Row>
                 </Col>

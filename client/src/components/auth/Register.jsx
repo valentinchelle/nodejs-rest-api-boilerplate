@@ -1,22 +1,11 @@
-/*!
+import React, { Component } from "react";
+import { Link, withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { registerUser } from "../../actions/authActions";
+import classnames from "classnames";
 
-=========================================================
-* Argon Design System React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-design-system-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-design-system-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-import React from "react";
-
+import { Alert } from "reactstrap";
 // reactstrap components
 import {
   Button,
@@ -35,16 +24,58 @@ import {
 } from "reactstrap";
 
 // core components
-import DemoNavbar from "components/Navbars/DemoNavbar.jsx";
-import SimpleFooter from "components/Footers/SimpleFooter.jsx";
+import DemoNavbar from "../../components/Navbars/DemoNavbar.jsx";
+import SimpleFooter from "../../components/Footers/SimpleFooter.jsx";
 
 class Register extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      name: "",
+      email: "",
+      password: "",
+      password2: "",
+      errors: {}
+    };
+  }
+
   componentDidMount() {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     this.refs.main.scrollTop = 0;
+    // If logged in and user navigates to Register page, should redirect them to dashboard
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({
+        errors: nextProps.errors
+      });
+    }
+  }
+
+  onChange = e => {
+    this.setState({ [e.target.id]: e.target.value });
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+
+    const newUser = {
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      password2: this.state.password2
+    };
+
+    this.props.registerUser(newUser, this.props.history);
+  };
+
   render() {
+    const { errors } = this.state;
     return (
       <>
         <DemoNavbar />
@@ -78,7 +109,7 @@ class Register extends React.Component {
                           <span className="btn-inner--icon mr-1">
                             <img
                               alt="..."
-                              src={require("assets/img/icons/common/github.svg")}
+                              src={require("../../assets/img/icons/common/github.svg")}
                             />
                           </span>
                           <span className="btn-inner--text">Github</span>
@@ -92,7 +123,7 @@ class Register extends React.Component {
                           <span className="btn-inner--icon mr-1">
                             <img
                               alt="..."
-                              src={require("assets/img/icons/common/google.svg")}
+                              src={require("../../assets/img/icons/common/google.svg")}
                             />
                           </span>
                           <span className="btn-inner--text">Google</span>
@@ -100,10 +131,14 @@ class Register extends React.Component {
                       </div>
                     </CardHeader>
                     <CardBody className="px-lg-5 py-lg-5">
-                      <div className="text-center text-muted mb-4">
-                        <small>Or sign up with credentials</small>
-                      </div>
-                      <Form role="form">
+                      {errors && errors.auth ? (
+                        <Alert color="warning">{errors.auth}</Alert>
+                      ) : (
+                        <div className="text-center text-muted mb-4">
+                          <small>Or sign up with credentials</small>
+                        </div>
+                      )}
+                      <Form role="form" noValidate onSubmit={this.onSubmit}>
                         <FormGroup>
                           <InputGroup className="input-group-alternative mb-3">
                             <InputGroupAddon addonType="prepend">
@@ -111,7 +146,13 @@ class Register extends React.Component {
                                 <i className="ni ni-hat-3" />
                               </InputGroupText>
                             </InputGroupAddon>
-                            <Input placeholder="Name" type="text" />
+                            <Input
+                              placeholder="Name"
+                              type="text"
+                              onChange={this.onChange}
+                              value={this.state.name}
+                              id="name"
+                            />
                           </InputGroup>
                         </FormGroup>
                         <FormGroup>
@@ -121,7 +162,13 @@ class Register extends React.Component {
                                 <i className="ni ni-email-83" />
                               </InputGroupText>
                             </InputGroupAddon>
-                            <Input placeholder="Email" type="email" />
+                            <Input
+                              placeholder="Email"
+                              type="email"
+                              onChange={this.onChange}
+                              value={this.state.email}
+                              id="email"
+                            ></Input>
                           </InputGroup>
                         </FormGroup>
                         <FormGroup>
@@ -135,6 +182,25 @@ class Register extends React.Component {
                               placeholder="Password"
                               type="password"
                               autoComplete="off"
+                              onChange={this.onChange}
+                              value={this.state.password}
+                              id="password"
+                            />
+                          </InputGroup>
+                        </FormGroup>
+                        <FormGroup>
+                          <InputGroup className="input-group-alternative">
+                            <InputGroupAddon addonType="prepend">
+                              <InputGroupText>
+                                <i className="ni ni-lock-circle-open" />
+                              </InputGroupText>
+                            </InputGroupAddon>
+                            <Input
+                              placeholder="Confirm Password"
+                              onChange={this.onChange}
+                              value={this.state.password2}
+                              id="password2"
+                              type="password"
                             />
                           </InputGroup>
                         </FormGroup>
@@ -175,7 +241,7 @@ class Register extends React.Component {
                           <Button
                             className="mt-4"
                             color="primary"
-                            type="button"
+                            type="submit"
                           >
                             Create account
                           </Button>
@@ -183,6 +249,14 @@ class Register extends React.Component {
                       </Form>
                     </CardBody>
                   </Card>
+                  <Row className="mt-3">
+                    <Col xs="6"></Col>
+                    <Col className="text-right" xs="6">
+                      <Link to="/login">
+                        <small>Already an account ?</small>
+                      </Link>
+                    </Col>
+                  </Row>
                 </Col>
               </Row>
             </Container>
@@ -193,5 +267,15 @@ class Register extends React.Component {
     );
   }
 }
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
 
-export default Register;
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(mapStateToProps, { registerUser })(withRouter(Register));
