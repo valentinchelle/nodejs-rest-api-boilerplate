@@ -2,11 +2,10 @@ const JwtStrategy = require("passport-jwt").Strategy;
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const mongoose = require("mongoose");
-const keys = require("../config/keys");
 
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = keys.secretOrKey;
+opts.secretOrKey = process.env.JWT_SECRET;
 
 const User = require("../users/models/User");
 const UsersController = require("../users/controllers/users.controller");
@@ -32,6 +31,7 @@ module.exports = passport => {
         .catch(err => console.log(err));
     })
   );
+
   // Google Strategy
   passport.use(
     new GoogleStrategy(

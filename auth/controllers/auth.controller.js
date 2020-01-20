@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const keys = require("../../config/keys");
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 const passport = require("passport");
@@ -55,7 +54,7 @@ exports.loginUser = (req, res) => {
         // Sign token
         jwt.sign(
           payload,
-          keys.secretOrKey,
+          process.env.JWT_SECRET,
           {
             expiresIn: 31556926 // 1 year in seconds
           },
@@ -92,7 +91,7 @@ exports.loginGoogle = (req, res, next) => {
     // Sign token
     jwt.sign(
       payload,
-      keys.secretOrKey,
+      process.env.JWT_SECRET,
       {
         expiresIn: 31556926 // 1 year in seconds
       },

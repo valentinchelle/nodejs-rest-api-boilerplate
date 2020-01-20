@@ -45,11 +45,7 @@ exports.loginOAuth = (
   - cb_success = callback function(user)
   - cb_fail = callback function(err)
   */
-  console.log(email);
-  console.log(name);
-  console.log(id_provider);
   // We lookup if already exist
-  console.log(cb_fail);
   console.log("[i] Login via Oauth");
   User.findOne(
     { OAuthId: id_provider, OAuthProvider: provider },
@@ -62,8 +58,6 @@ exports.loginOAuth = (
       // if there is already someone with that googleId
       if (userMatch) {
         console.log("[i] User Found!");
-        console.log(userMatch);
-
         cb_success(userMatch);
       } else {
         // creating the new user
