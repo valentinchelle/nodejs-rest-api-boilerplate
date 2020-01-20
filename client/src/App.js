@@ -12,14 +12,12 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 
 import PrivateRoute from "./components/private-route/PrivateRoute";
-import Dashboard from "./components/dashboard/Dashboard";
-import Profile from "./components/dashboard/Profile";
+import Profile from "./components/profile/Profile";
 import FlashAlert from "./components/layout/FlashAlert";
 // Check for token to keep user logged in
 if (localStorage.jwtToken && localStorage.jwtToken !== "Bearer null") {
   // Set auth token header auth
   const token = localStorage.jwtToken;
-  console.log(token);
   setAuthToken(token);
   // Decode token and get user info and exp
   const decoded = jwt_decode(token);
@@ -43,7 +41,6 @@ class App extends Component {
     if (params) {
       token = params.get("token");
       if (token) {
-        console.log(token);
         setJWTtoken(token);
       }
     }
@@ -58,7 +55,7 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Switch>
-              <PrivateRoute exact path="/dashboard" component={Profile} />
+              <PrivateRoute exact path="/profile" component={Profile} />
             </Switch>
           </div>
         </Router>

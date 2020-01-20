@@ -15,15 +15,11 @@ class FlashAlert extends React.Component {
     };
   }
   componentWillReceiveProps(nextProps) {
-    console.log("NewProps");
-    console.log(nextProps);
     if (nextProps.errors) {
-      console.log("showing true");
       this.setState({
         showAlert: true
       });
       setTimeout(() => {
-        console.log("timeout");
         this.setState({
           showAlert: false
         });
@@ -32,13 +28,6 @@ class FlashAlert extends React.Component {
   }
   render() {
     const { errors } = this.props;
-    console.log(errors);
-    console.log(this.props);
-    console.log(this.state);
-    console.log((errors !== undefined) & this.state.showAlert);
-    if (errors.data) {
-      console.log(errors.data.email);
-    }
     return (errors.data !== undefined) & this.state.showAlert ? (
       <Alert
         color="warning"

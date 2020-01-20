@@ -41,12 +41,12 @@ class Login extends React.Component {
     this.refs.main.scrollTop = 0;
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/profile");
     }
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/profile");
     }
 
     if (nextProps.errors) {
@@ -100,8 +100,7 @@ class Login extends React.Component {
                         <Button
                           className="btn-neutral btn-icon"
                           color="default"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
+                          href="http://localhost:5000/api/auth/facebook"
                         >
                           <span className="btn-inner--icon mr-1">
                             <img

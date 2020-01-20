@@ -53,7 +53,7 @@ exports.loginOAuth = (
     (err, userMatch) => {
       // handle errors here:
       if (err) {
-        console.log("Error!! trying to find user with OAuth Id");
+        console.log("[!] Error!! trying to find user with OAuth Id");
         return cb_fail(err);
       }
       // if there is already someone with that googleId
@@ -62,6 +62,7 @@ exports.loginOAuth = (
         cb_success(userMatch);
       } else {
         console.log("[i] Creating new user");
+        console.log(email);
         // creating the new user
         const newUser0Auth = new User({
           OAuthProvider: provider,
@@ -71,7 +72,6 @@ exports.loginOAuth = (
           profilePicture: picture,
           email: email
         });
-        console.log(newUser0Auth);
         newUser0Auth
           .save()
           .then(user => {

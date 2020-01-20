@@ -22,7 +22,6 @@ exports.registerUser = (req, res) => {
 
 exports.loginUser = (req, res) => {
   // Form validation
-  console.log("lOGINNNN");
   const { errors, isValid } = validateLoginInput(req.body);
 
   // Check validation
@@ -88,8 +87,37 @@ exports.loginGoogle = (req, res, next) => {
       email: user.email,
       profilePicture: user.profilePicture
     };
-    console.log("token");
-    console.log(payload);
+    // Sign token
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      {
+        expiresIn: 31556926 // 1 year in seconds
+      },
+      (err, token) => {
+        return res
+          .cookie("jwt", token, { httpOnly: true })
+          .redirect(`http://localhost:3000/?token=${token}`);
+      }
+    );
+  })(req, res, next);
+};
+exports.loginFacebook = (req, res, next) => {
+  passport.authenticate("facebook", function(err, user, info) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.redirect("/login");
+    }
+    // User matched
+    // Create JWT Payload
+    const payload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      profilePicture: user.profilePicture
+    };
     // Sign token
     jwt.sign(
       payload,

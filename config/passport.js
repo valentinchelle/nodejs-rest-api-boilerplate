@@ -1,5 +1,7 @@
 const JwtStrategy = require("passport-jwt").Strategy;
+
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+var FacebookStrategy = require("passport-facebook").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const mongoose = require("mongoose");
 
@@ -51,6 +53,41 @@ module.exports = passport => {
           "google",
           profile.id,
           profile_json.picture,
+          function(user) {
+            return done(null, user);
+          },
+          function(err) {
+            console.log(err);
+            return done(null, false);
+          }
+        );
+      }
+    )
+  );
+
+  console.log(process.env.FACEBOOK_CLIENT_ID);
+  // Facebook Strategy
+  passport.use(
+    new FacebookStrategy(
+      {
+        clientID: process.env.FACEBOOK_CLIENT_ID,
+        clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+        callbackURL: "/api/auth/facebook/callback",
+
+        profileFields: ["id", "displayName", "picture.type(large)", "email"]
+      },
+      function(token, tokenSecret, profile, done) {
+        // we retrieve the data we need from google
+        console.log("FACEBOOK");
+        console.log(profile);
+        // We use the loginOAuth defined in the controller of the users
+        UsersController.loginOAuth(
+          profile.emails[0].value,
+          profile.displayName.split(" ")[0],
+          "",
+          "facebook",
+          profile.id,
+          profile.photos[0].value,
           function(user) {
             return done(null, user);
           },

@@ -36,7 +36,6 @@ export const loginUser = userData => dispatch => {
       return decoded;
     })
     .catch(err => {
-      console.log(err.response);
       dispatch({
         type: GET_ERRORS,
         payload: err.response
@@ -47,16 +46,13 @@ export const loginUser = userData => dispatch => {
 
 // Used to set a JWT after OAuth
 export const setJWTtoken = raw_token => {
-  console.log(raw_token);
   if (raw_token !== undefined) {
     let token = "Bearer " + raw_token;
-    console.log(token);
     localStorage.setItem("jwtToken", token);
     // Set token to Auth header
     setAuthToken(token);
     // Decode token to get user data
     const decoded = jwt_decode(token);
-    console.log(decoded);
     // Set current user
     store.dispatch(setCurrentUser(decoded));
   }

@@ -23,6 +23,7 @@
     "mongoose": "^5.3.11",
     "node-sass": "^4.13.1",
     "passport": "^0.4.0",
+    "passport-facebook": "^3.0.0",
     "passport-google-oauth": "^2.0.0",
     "passport-jwt": "^4.0.0",
     "query-string": "^6.10.1",

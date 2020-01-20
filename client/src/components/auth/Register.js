@@ -45,7 +45,7 @@ class Register extends React.Component {
     this.refs.main.scrollTop = 0;
     // If logged in and user navigates to Register page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+      this.props.history.push("/profile");
     }
   }
 
