@@ -19,10 +19,15 @@ exports.insert = (req, res) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
           if (err) throw err;
           newUser.password = hash;
-          newUser
-            .save()
-            .then(user => res.json(user))
-            .catch(err => console.log(err));
+          // Calling the model to create the user
+          UserModel.createUser(newUser)
+            .then(user => {
+              console.log("[i] User Created!");
+              res.json(user);
+            })
+            .catch(function(error) {
+              console.log(err);
+            });
         });
       });
     }
@@ -72,13 +77,14 @@ exports.loginOAuth = (
           profilePicture: picture,
           email: email
         });
-        newUser0Auth
-          .save()
+        UserModel.createUser(newUser0Auth)
           .then(user => {
             console.log("[i] User Created!");
             cb_success(user);
           })
-          .catch(err => cb_fail(err));
+          .catch(function(error) {
+            cb_fail(error);
+          });
       }
     }
   ); // closes User.findONe
@@ -114,13 +120,13 @@ exports.patchById = (req, res) => {
         newUser = req.body;
         newUser.password = hash;
 
-        UserModel.patchUser(req.params.userId, newUser).then(result => {
+        UserModel.patch(req.params.userId, newUser).then(result => {
           res.status(204).send({});
         });
       });
     });
   } else {
-    UserModel.patchUser(req.params.userId, req.body).then(result => {
+    UserModel.patch(req.params.userId, req.body).then(result => {
       res.status(204).send({});
     });
   }
