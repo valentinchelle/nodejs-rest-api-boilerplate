@@ -12,6 +12,7 @@ app.use(function(req, res, next) {
   if (req.method === "OPTIONS") {
     return res.send(200);
   } else {
+    console.log(req.originalUrl);
     return next();
   }
 });

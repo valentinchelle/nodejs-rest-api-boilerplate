@@ -67,7 +67,11 @@ class Profile extends React.Component {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={require("../../assets/img/theme/team-4-800x800.jpg")}
+                            src={
+                              user.profilePicture
+                                ? user.profilePicture
+                                : require("../../assets/img/theme/team-4-800x800.jpg")
+                            }
                           />
                         </a>
                       </div>

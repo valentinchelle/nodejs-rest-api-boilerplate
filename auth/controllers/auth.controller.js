@@ -85,9 +85,11 @@ exports.loginGoogle = (req, res, next) => {
     const payload = {
       id: user.id,
       name: user.name,
-      email: user.email
+      email: user.email,
+      profilePicture: user.profilePicture
     };
-
+    console.log("token");
+    console.log(payload);
     // Sign token
     jwt.sign(
       payload,

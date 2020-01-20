@@ -43,6 +43,7 @@ class App extends Component {
     if (params) {
       token = params.get("token");
       if (token) {
+        console.log(token);
         setJWTtoken(token);
       }
     }

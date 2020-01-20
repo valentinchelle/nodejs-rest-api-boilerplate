@@ -42,16 +42,15 @@ module.exports = passport => {
       },
       function(token, tokenSecret, profile, done) {
         // we retrieve the data we need from google
-        const { googleid, name } = profile;
         profile_json = profile._json;
-
         // We use the loginOAuth defined in the controller of the users
         UsersController.loginOAuth(
           profile_json.email,
-          name.givenName,
-          name.familyName,
+          profile_json.given_name,
+          profile_json.family_name,
           "google",
-          googleid,
+          profile.id,
+          profile_json.picture,
           function(user) {
             return done(null, user);
           },
