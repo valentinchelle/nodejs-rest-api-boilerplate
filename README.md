@@ -79,8 +79,8 @@ The app will call an API route ( like `url/api/users/modifyuser` ). The router m
 
 | Endpoint                   | Token Needed | Body Request    | Description                                         |
 | -------------------------- | ------------ | --------------- | --------------------------------------------------- |
-| GET `/api/users/`          | yes          |                 | Returns the list of the users                       |
-| PATCH `/api/users/:userid` | yes          | {name : "John"} | Update the given current user with the body request |
+| `GET /api/users/`          | yes          |                 | Returns the list of the users                       |
+| `PATCH /api/users/:userid` | yes          | {name : "John"} | Update the given current user with the body request |
 
 ### `localhost:3600/users` : Insert a new user
 
