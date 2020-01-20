@@ -29,6 +29,14 @@ const UserSchema = new Schema({
   },
   google: {
     googleId: { type: String, required: false }
+  },
+  OAuthProvider: {
+    type: String,
+    required: false
+  },
+  OAuthId: {
+    type: String,
+    required: false
   }
 });
 

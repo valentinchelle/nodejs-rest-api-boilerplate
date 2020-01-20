@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 
 const authRouter = require("./auth/auth.routes");
-const users = require("./routes/api/users");
+const usersRouter = require("./users/users.routes");
 require("dotenv").config();
 const app = express();
 app.use(function(req, res, next) {
@@ -39,7 +39,7 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 // Routes
-//app.use("/api/users", users);
+app.use("/api/users", usersRouter);
 app.use("/api/auth", authRouter);
 
 app.get("/favicon.ico", (req, res) => {

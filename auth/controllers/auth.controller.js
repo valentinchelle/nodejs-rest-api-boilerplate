@@ -5,7 +5,8 @@ const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 const passport = require("passport");
 // Load User model
-const User = require("../../models/User");
+const User = require("../../users/models/User");
+const UsersController = require("../../users/controllers/users.controller");
 
 exports.registerUser = (req, res) => {
   // Form validation
@@ -17,29 +18,7 @@ exports.registerUser = (req, res) => {
     return res.status(400).json(errors);
   }
 
-  User.findOne({ email: req.body.email }).then(user => {
-    if (user) {
-      return res.status(400).json({ email: "Email already exists" });
-    } else {
-      const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
-      });
-
-      // Hash password before saving in database
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw err;
-          newUser.password = hash;
-          newUser
-            .save()
-            .then(user => res.json(user))
-            .catch(err => console.log(err));
-        });
-      });
-    }
-  });
+  return UsersController.insert(req, res);
 };
 
 exports.loginUser = (req, res) => {
