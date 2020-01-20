@@ -114,7 +114,7 @@ class Login extends React.Component {
                         <Button
                           className="btn-neutral btn-icon ml-1"
                           color="default"
-                          href="http://localhost:5000/api/users/google"
+                          href="http://localhost:5000/api/auth/google"
                         >
                           <span className="btn-inner--icon mr-1">
                             <img
@@ -147,11 +147,7 @@ class Login extends React.Component {
                               type="email"
                               onChange={this.onChange}
                               value={this.state.email}
-                              error={errors.email}
                               id="email"
-                              className={classnames("", {
-                                invalid: errors.email || errors.emailnotfound
-                              })}
                             />
                           </InputGroup>
                         </FormGroup>
@@ -168,12 +164,7 @@ class Login extends React.Component {
                               autoComplete="off"
                               onChange={this.onChange}
                               value={this.state.password}
-                              error={errors.password}
                               id="password"
-                              className={classnames("", {
-                                invalid:
-                                  errors.password || errors.passwordincorrect
-                              })}
                             />
                           </InputGroup>
                         </FormGroup>

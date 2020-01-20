@@ -24,8 +24,8 @@ import {
 } from "reactstrap";
 
 // core components
-import DemoNavbar from "../../components/Navbars/DemoNavbar.jsx";
-import SimpleFooter from "../../components/Footers/SimpleFooter.jsx";
+import DemoNavbar from "../Navbars/DemoNavbar.jsx";
+import SimpleFooter from "../Footers/SimpleFooter.jsx";
 
 class Register extends React.Component {
   constructor() {

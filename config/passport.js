@@ -36,7 +36,7 @@ module.exports = passport => {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/api/users/google/callback"
+        callbackURL: "/api/auth/google/callback"
       },
       function(token, tokenSecret, profile, done) {
         // testing
@@ -55,7 +55,6 @@ module.exports = passport => {
           }
           // if there is already someone with that googleId
           if (userMatch) {
-            console.log("asdfsdfasdf");
             console.log(userMatch);
             return done(null, userMatch);
           } else {

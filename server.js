@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 
+const authRouter = require("./auth/auth.routes");
 const users = require("./routes/api/users");
 require("dotenv").config();
 const app = express();
@@ -38,7 +39,9 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 // Routes
-app.use("/api/users", users);
+//app.use("/api/users", users);
+app.use("/api/auth", authRouter);
+
 app.get("/favicon.ico", (req, res) => {
   res.end();
   console.log("favicon requested");
