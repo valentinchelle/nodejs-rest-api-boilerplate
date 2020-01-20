@@ -24,15 +24,13 @@ Please make sure that you have:
 - [x] Clean Structure Component Oriented
 - [ ] Templates to create your own components
 - [x] Secure Authentification System with email/password using **JWT**.
-- [ ] Change Password
-- [ ] Forgot Password
-- [ ] Reset Password
-- [ ] Delete Account
+- [ ] Emails
 - [x] List Entity
-- [ ] Patch Entity : modify your entity
+- [ ] Patch Entity ( like edit user)
+- [x] Delete Entity
 - [x] OAuth 2.0 Authentication via Facebook, Google
 - [x] Easy-to-use endpoints
-- [ ] Middlewares to ensure authentification and permission to access resources.
+- [x] Middlewares to ensure authentification and permission to access resources.
 
 # Usage
 
@@ -77,16 +75,18 @@ The app will call an API route ( like `url/api/users/modifyuser` ). The router m
 
 ## Api Endpoints
 
-| Endpoint               | Token Needed | Body Request    | Description                           |
-| ---------------------- | ------------ | --------------- | ------------------------------------- |
-| `GET /api/users/`      | yes          |                 | Returns the list of the users         |
-| `PATCH /api/users/:id` | yes          | {name : "John"} | Update the user with the body request |
+| Endpoint                | Token Needed | Body Request    | Description                            |
+| ----------------------- | ------------ | --------------- | -------------------------------------- |
+| `GET /api/users/`       | yes          |                 | Returns the list of the users          |
+| `GET /api/users/:id`    | yes          |                 | Returns info about the user            |
+| `PATCH /api/users/:id`  | yes          | {name : "John"} | Updates the user with the body request |
+| `DELETE /api/users/:id` | yes          |                 | Deletes the user. ADMIN ONLY           |
 
 ## Routes Middlewares
 
 | Name                               | Path                            | Description                      |
 | ---------------------------------- | ------------------------------- | -------------------------------- |
-| onlySameUserOrAdminCanDoThisAction | `users/middlewares/permissions` | for actions like editing profile |
+| onlySameUserOrAdminCanDoThisAction | `users/middlewares/permissions` | For actions like editing profile |
 | validJWTNeeded                     | `auth/middlewares/auth`         | Make sure the user is logged     |
 
 ### `localhost:3600/users` : Insert a new user
