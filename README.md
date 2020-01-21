@@ -132,10 +132,33 @@ This is the usual API endpoints for a given entity ( here the users ):
 
 The middlewares are used to validate a requets. It is mainly used here to make sure the user has the permission to access the route. Here is the list of the different middleware and where they are implemented.
 
-| Name                               | Path                            | Description                      |
-| ---------------------------------- | ------------------------------- | -------------------------------- |
-| onlySameUserOrAdminCanDoThisAction | `users/middlewares/permissions` | For actions like editing profile |
-| validJWTNeeded                     | `auth/middlewares/auth`         | Make sure the user is logged     |
+It is then very easy to use, as shown in this example :
+
+```javascript
+router.delete("/:userId", [
+  AuthMiddleware.validJWTNeeded,
+  PermissionsMiddleware.minimumPermissionLevelRequired(ADMIN),
+  UsersController.removeById
+]);
+```
+
+### Useful
+
+| Name                               | Path                            | Description                          |
+| ---------------------------------- | ------------------------------- | ------------------------------------ |
+| onlySameUserOrAdminCanDoThisAction | `users/middlewares/permissions` | For actions like editing profile     |
+| minimumPermissionLevelRequired     | `users/middlewares/permissions` | Ensures the user has the permission  |
+| sameUserCantDoThisAction           | `users/middlewares/permissions` | Ensures the user can't do the action |
+| validJWTNeeded                     | `auth/middlewares/auth`         | Ensures the contains a _valid_ JWT   |
+
+### Specific
+
+| Name                               | Path                            | Description                                  |
+| ---------------------------------- | ------------------------------- | -------------------------------------------- |
+| onlySameUserOrAdminCanDoThisAction | `users/middlewares/permissions` | For actions like editing profile             |
+| verifyRefreshBodyField             | `auth/middlewares/auth`         | Ensures the request contains a refresh token |
+| validRefreshNeeded                 | `auth/middlewares/auth`         | Ensures the refresh token is valid           |
+| JwtNeeded                          | `auth/middlewares/auth`         | Ensures the contains a JWT token (not valid) |
 
 # Understanding the login logic
 
@@ -145,19 +168,19 @@ The first step in the login process, is for a registered user to send its email/
 Endpoint : `endpoint:3600/auth`
 Body :
 
-```
+```json
 {
-	"email": "user@azerty.com",
-	"password": "secret"
+  "email": "user@azerty.com",
+  "password": "secret"
 }
 ```
 
 If the login credentials are right, the response should be like:
 
-```
+```json
 {
-"accessToken": "eyJhbGcidOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZTIzNjRlZDQ4NDE2YzY2ZjYwMGIwYjgiLCJlbWFpbCI6InZhbGVudGluLmNoZWxsZTNAZ21haWwuY29tIiwicGVybWlzc2lvbkxldmVsIjoxLCJwcm92aWRlciI6ImVtYWlsIiwibmFtZSI6InVuZGVmaW5lZCB1bmRlZmluZWQiLCJyZWZyZXNoS2V5IjoiRUlVUk12NENQKytOZitzSHRnZThFZz09IiwiaWF0IjoxNTc5Mzc5NTY1fQ.jBIa5DNI0ObjVW7i3qF68XguKxuw_4lLmr-5S15rOp4",
-"refreshToken": "RFZJZE5YRWldTS3B2bWtUUlByaVZUeVJNTVFyYko5Sm80OUsycWtYUU9PYlFuQURCYkh4K202YWxnd2IybmFiRkQ0TWl2TElQemJKeGUrQ3FpdXVmR3c9PQ=="
+  "accessToken": "eyJhbGcidOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZTIzNjRlZDQ4NDE2YzY2ZjYwMGIwYjgiLCJlbWFpbCI6InZhbGVudGluLmNoZWxsZTNAZ21haWwuY29tIiwicGVybWlzc2lvbkxldmVsIjoxLCJwcm92aWRlciI6ImVtYWlsIiwibmFtZSI6InVuZGVmaW5lZCB1bmRlZmluZWQiLCJyZWZyZXNoS2V5IjoiRUlVUk12NENQKytOZitzSHRnZThFZz09IiwiaWF0IjoxNTc5Mzc5NTY1fQ.jBIa5DNI0ObjVW7i3qF68XguKxuw_4lLmr-5S15rOp4",
+  "refreshToken": "RFZJZE5YRWldTS3B2bWtUUlByaVZUeVJNTVFyYko5Sm80OUsycWtYUU9PYlFuQURCYkh4K202YWxnd2IybmFiRkQ0TWl2TElQemJKeGUrQ3FpdXVmR3c9PQ=="
 }
 ```
 
