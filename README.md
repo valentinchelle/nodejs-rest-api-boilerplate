@@ -1,11 +1,13 @@
 # NodeJs Api Boilerplate
 
-A boilerplate for **NodeJs** Rest Api. with a ReactJS client example. Implements Classic Auth, 0Auth (Google Login, Facebook Login).
+A boilerplate for **NodeJs** Rest Api. Implements a clean structure, with the best practices for authentication, including OAuth for _Google Login_ and _Facebook Login_.
 
 You probably know how hard it is to start a node js API, with a well structured and clean code. Especially if you are on a rush for an hackhaton or a school project.
-I give you here a clean code, that implements what essential for a new API project : a clean nodejs structure implementing a User System following the best practices.
+I give you here a clean code, that implements what is essential for a new API project : a clean nodejs structure implementing a user system following the best practices.
 
 You can directly plug this API with the front end of your choice by calling the different endpoints. I also give details on how to extend this code to adapt it for your project.
+
+This API can be used with any front end, here is the front end I have developed with ReactJS to interact with this API.
 
 # Prerequisites
 
@@ -24,11 +26,10 @@ The entity example in this repo is users, but it can be easily applied to articl
 
 - [x] Clean Structure Component Oriented
 - [ ] Templates to create your own entities
-- [x] Secure Authentification System with email/password using **JWT**.
-- [ ] Emails
+- [x] Secure Authentification System with email/password using **JWT**
 - [x] Get Entity
 - [x] List Entity
-- [x] Patch Entity ( like edit user)
+- [x] Patch Entity
 - [x] Delete Entity
 - [x] OAuth 2.0 Authentication via Facebook, Google
 - [x] Easy-to-use endpoints
@@ -130,11 +131,13 @@ This is the usual API endpoints for a given entity ( here the users ):
 
 ## Routes Middlewares
 
-The middlewares are used to validate a requets. It is mainly used here to make sure the user has the permission to access the route. Here is the list of the different middleware and where they are implemented.
+The middlewares are used to _validate a request_. In this boilerplate, it is mainly used here to make sure the user has the permission to access the route. Here is the list of the different middleware and where they are implemented.
 
 It is then very easy to use, as shown in this example :
 
 ```javascript
+const AuthMiddleware = require("../auth/middlewares/auth.middleware");
+const PermissionsMiddleware = require("../users/middlewares/permissions.middlewares");
 router.delete("/:userId", [
   AuthMiddleware.validJWTNeeded,
   PermissionsMiddleware.minimumPermissionLevelRequired(ADMIN),
@@ -144,12 +147,12 @@ router.delete("/:userId", [
 
 ### Useful
 
-| Name                               | Path                            | Description                          |
-| ---------------------------------- | ------------------------------- | ------------------------------------ |
-| onlySameUserOrAdminCanDoThisAction | `users/middlewares/permissions` | For actions like editing profile     |
-| minimumPermissionLevelRequired     | `users/middlewares/permissions` | Ensures the user has the permission  |
-| sameUserCantDoThisAction           | `users/middlewares/permissions` | Ensures the user can't do the action |
-| validJWTNeeded                     | `auth/middlewares/auth`         | Ensures the contains a _valid_ JWT   |
+| Name                               | Path                            | Description                                   |
+| ---------------------------------- | ------------------------------- | --------------------------------------------- |
+| validJWTNeeded                     | `auth/middlewares/auth`         | Ensures the user is logged with a _valid_ JWT |
+| onlySameUserOrAdminCanDoThisAction | `users/middlewares/permissions` | For actions like editing profile              |
+| minimumPermissionLevelRequired     | `users/middlewares/permissions` | Ensures the user has the permission           |
+| sameUserCantDoThisAction           | `users/middlewares/permissions` | Ensures the user can't do the action          |
 
 ### Specific
 
@@ -161,6 +164,50 @@ router.delete("/:userId", [
 | JwtNeeded                          | `auth/middlewares/auth`         | Ensures the contains a JWT token (not valid) |
 
 # Understanding the login logic
+
+## What is a JWT ?
+
+Our authentifcation system relies on a JWT, _JSON Web Tokens_. The idea is to encode the user information, and to load all the communication between the server and the frontend with this token. This token has usually an expire date.
+
+A simple overview would be :
+
+```javascript
+// ----------- SERVER SIDE -----------
+const User = { name: "John", age: 21}
+const jwt = encode(User, expireIn = 60 ); // will expire in 60 seconds
+send_jwt_to_client();
+// ----------- CLIENT SIDE -----------
+const jwt = receive_jwt_from_server();
+const User = decode(jwt);
+>>> console.log(User)
+{
+  "name": "John",
+  "age" : 21,
+  "iat": 1516239022
+}
+```
+
+## The steps
+
+Here is the different request between the server and the font end to handle the authentication.
+
+1. The user enters its credentials on the front end
+2. The front end sends the credentials to the server
+3. The server compares the credentials with the database
+4. The server sends back to the front end a _jwt token_ ( containing information about the user ) and a _refresh token_
+5. The front end extracts the token, sets the Authorization Headers of the next requests to `Bearer + token_value`
+
+Now that the front end registered the _jwt token_ and the _refresh token_, let's say the user tries to access
+
+6. the front end sends a request to the server, with the _jwt token_ in Authorization headers
+7. the back end checks the validity of the _jwt token_, and if it is valid, return a response
+
+The subititly is that for the system to be secure enough, the _jwt token_ is encrypted with a limited lifetime.
+If the front end detects that the *jwt token*is expired, it needs a new one. Here is the process :
+
+1. The front end sends the _expired jwt token_ along with the _refresh token_
+2. The back end checks the validity of the refresh token, and generates a new _jwt token_
+3. The backend sends back the same _refresh token_ and the new _jwt token_
 
 ## Step 1 : Login with credentials
 
@@ -188,8 +235,7 @@ The access token is the famous `json web token`. It is a stateless string that w
 
 ## Step 2 : Stay logged with the JWT
 
-In order to make your users stay logged on your app, you have to provide the jwt for each request. To do that,
-Grab the `accessToken` from the previous request, prefix it with `Bearer` and add it to the request headers under Authorization.
+In order to make your users stay logged on your app, you have to provide the jwt for each request. To do that, on the front end side, grab the `accessToken` from the previous request, prefix it with `Bearer` and add it to the request headers under Authorization.
 This will be required for every route with the middleware `ValidationMiddleware.validJWTNeeded` like :
 
 ```
