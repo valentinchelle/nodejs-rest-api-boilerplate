@@ -28,6 +28,27 @@ exports.validRefreshNeeded = (req, res, next) => {
   );
 };
 
+// WARNING : The following doesnt verify the jwt. Just verifies its existence.
+exports.JwtNeeded = (req, res, next) => {
+  console.log(req.headers["authorization"]);
+  if (req.headers["authorization"]) {
+    try {
+      let authorization = req.headers["authorization"].split(" ");
+      if (authorization[0] !== "Bearer") {
+        return res.status(403).send();
+      } else {
+        req.jwt = jwt.decode(authorization[1]);
+        return next();
+      }
+    } catch (err) {
+      console.log(err);
+      return res.status(403).send();
+    }
+  } else {
+    return res.status(403).send();
+  }
+};
+
 exports.validJWTNeeded = (req, res, next) => {
   console.log(req.headers["authorization"]);
   if (req.headers["authorization"]) {

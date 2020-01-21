@@ -34,7 +34,7 @@ router.post("/register", AuthController.registerUser);
 router.post("/login", AuthController.loginUser);
 
 router.post("/refresh", [
-  AuthMiddleware.validJWTNeeded,
+  AuthMiddleware.JwtNeeded,
   AuthMiddleware.verifyRefreshBodyField,
   AuthMiddleware.validRefreshNeeded,
   AuthController.refresh_token

@@ -22,7 +22,7 @@ exports.generateTokens = (user, cb) => {
         user,
         process.env.JWT_SECRET,
         {
-          expiresIn: 60 * 60 // 1 hour in seconds
+          expiresIn: 1 // 1 hour in seconds
         },
         (err, jwttoken) => {
           cb(err, jwttoken, refresh_token);
@@ -35,11 +35,10 @@ exports.generateTokens = (user, cb) => {
 exports.refresh_token = (req, res) => {
   // The refresh token has been validated by the middle ware before.
 
-  console.log("Reached refresh funciton");
+  console.log("[i] Reached refresh function");
   try {
     req.body = req.jwt;
     const userId = req.body.id;
-    console.log(userId);
     User.model.findOne({ _id: userId }).then(user => {
       // Check if user exists
       if (!user) {

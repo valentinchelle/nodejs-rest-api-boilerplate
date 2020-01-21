@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import { setAuthToken } from "./actions/authActions";
+import { setAuthToken, refreshToken } from "./actions/authActions";
 import { browserHistory } from "react-router";
 
 import { setCurrentUser, logoutUser, setJWTtoken } from "./actions/authActions";
@@ -24,21 +24,18 @@ if (
 ) {
   // Set auth token header auth
   const token = localStorage.jwtToken;
+  const refresh_token = localStorage.refreshToken;
 
-  const refreshToken = localStorage.refreshToken;
-  setAuthToken(token, refreshToken);
-  // Decode token and get user info and exp
-  const decoded = jwt_decode(token);
+  const decoded = setAuthToken(token, refresh_token);
+  console.log(decoded);
   // Set user and isAuthenticated
   store.dispatch(setCurrentUser(decoded));
   // Check for expired token
   const currentTime = Date.now() / 1000; // to get in milliseconds
   if (decoded.exp < currentTime) {
     // Logout user
-    store.dispatch(logoutUser());
-
-    // Redirect to login
-    window.location.href = "./login";
+    console.log("[i] Token Expired");
+    store.dispatch(refreshToken());
   }
 }
 class App extends Component {

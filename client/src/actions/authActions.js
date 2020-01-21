@@ -126,7 +126,7 @@ export const refreshToken = () => dispatch => {
       refresh_token: localStorage.getItem("refreshToken")
     })
     .then(res => {
-      console.log(res);
+      console.log("[+] Refreshing user done.");
       var jwtToken = res.data.token;
       var refreshToken = res.data.refresh_token;
       var decoded = setAuthToken(jwtToken, refreshToken);
@@ -134,10 +134,15 @@ export const refreshToken = () => dispatch => {
     })
     .catch(err => {
       console.log(err);
+
       dispatch({
         type: GET_ERRORS,
         payload: err.response ? err.response : "Unable to refresh the session."
       });
+      console.log("[!] Failed Refreshing user.");
+      dispatch(logoutUser());
+      // Redirect to login
+      window.location.href = "./login";
       return err;
     });
 };
