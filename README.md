@@ -33,7 +33,7 @@ The entity example in this repo is users, but it can be easily applied to articl
 - [x] Easy-to-use endpoints
 - [x] Middlewares to ensure authentification and permission to access resources.
 
-# SETUP
+# Getting Started
 
 ## Prerequisites
 
@@ -41,7 +41,7 @@ Please make sure that you have:
 
 - node.js installed (https://nodejs.org/)
 
-## Getting Started
+## Cloning the repo
 
 The easiest way to get started is to clone the repository:
 
