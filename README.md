@@ -76,9 +76,11 @@ JWT_SECRET=randomString123
 - Grab your **Client ID** and **Client Secret** on the same page
 - Fill the .env at the root of the server with these credentials
 
-## Setup MongoDB
+## Setup : MongoDB
 
-SOON
+- Create a new account on https://cloud.mongodb.com/ and choose the free plan
+- On the homepage, click on _Connect > Connect your application > _
+- Copy the **Connection String**, replace <password> by your actual password, and paste in the .env as _MONGO_URI_
 
 ## Client
 
@@ -96,7 +98,12 @@ Each component corresponds to a folder, and follows an Model Controller Middlewa
 - **routes.js** for the definition of the endpoints for each actions of the controllers. Defines also what are the middleware used for the routes.
 
 The global logic for an app calling this rest API :
-The app will call an API route ( like `url/api/users/modifyuser` ). The router makes the request pass through the middleware (`isConnected()`) towards the controller action (`modifyUser()`). The controller action will then call the model to modify a record in the table.
+
+1. The client will call an API route ( like `url/api/users/modifyuser` )
+2. The router makes the request pass through middlewares ( like `isConnected()`) to validate the request
+3. The router feeds the controller by calling one of its action ( like `modifyUser()`).
+4. The controller action access the model ( the database ) to modify/access a record in the table.
+5. The controller ends up by returning a response
 
 ## Api Endpoints
 
@@ -105,6 +112,7 @@ The app will call an API route ( like `url/api/users/modifyuser` ). The router m
 | Endpoint                  | Body Request Fields                               | Description                        |
 | ------------------------- | ------------------------------------------------- | ---------------------------------- |
 | `POST /api/auth/login`    | {email : "", password:""}                         | Login the user                     |
+| `POST /api/auth/refresh`  | {refresh_token: ""}                               | Generate a new Json Web Token      |
 | `POST /api/auth/register` | {email : "", name:"", password :"", password2:""} | Creates a new user.                |
 | `GET /api/auth/google`    |                                                   | Entry point for the Google Oauth   |
 | `GET /api/auth/facebook`  |                                                   | Entry point for the Facebook Oauth |
@@ -122,24 +130,12 @@ This is the usual API endpoints for a given entity ( here the users ):
 
 ## Routes Middlewares
 
+The middlewares are used to validate a requets. It is mainly used here to make sure the user has the permission to access the route. Here is the list of the different middleware and where they are implemented.
+
 | Name                               | Path                            | Description                      |
 | ---------------------------------- | ------------------------------- | -------------------------------- |
 | onlySameUserOrAdminCanDoThisAction | `users/middlewares/permissions` | For actions like editing profile |
 | validJWTNeeded                     | `auth/middlewares/auth`         | Make sure the user is logged     |
-
-### `localhost:3600/users` : Insert a new user
-
-Request Body :
-
-```
-{
-	"firstname": "Valentin",
-	"lastname": "Rigolo",
-	"email": "valentin.rigolo@azerty.com",
-	"password": "secret"
-
-}
-```
 
 # Understanding the login logic
 
