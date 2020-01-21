@@ -2,4 +2,4 @@
 package-lock.json
 /client/node_modules
 .env
-/client/*
+client/*
