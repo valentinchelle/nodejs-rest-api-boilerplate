@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
+import { browserHistory } from "react-router";
 
 import { setCurrentUser, logoutUser, setJWTtoken } from "./actions/authActions";
 import { Provider } from "react-redux";
@@ -34,17 +35,6 @@ if (localStorage.jwtToken && localStorage.jwtToken !== "Bearer null") {
   }
 }
 class App extends Component {
-  componentDidMount(req, res) {
-    let token = null;
-    let search = window.location.search;
-    let params = new URLSearchParams(search);
-    if (params) {
-      token = params.get("token");
-      if (token) {
-        setJWTtoken(token);
-      }
-    }
-  }
   render() {
     return (
       <Provider store={store}>
