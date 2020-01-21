@@ -2,7 +2,7 @@
   Nodejs Boilerplate
 </h3>
 <p align="center">
-  A powerful boilerplate **API** with Google and Facebook Login.
+  A powerful boilerplate for a <b>NodeJS API</b> with Google and Facebook Login.
 </p>
 
 # NodeJs Api Boilerplate
@@ -63,7 +63,7 @@ npm start
 
 To use all the functionnalities, you will need to set the environment variables.
 
-Firstly, add a file named `.env` at the root of the folder (same level as `index.js`), copy paste the following template and save it. You can change the value of JWT_SECRET to something else to make it more secure.
+Firstly, add a file named `.env` at the root of the folder (same level as `index.js`), copy paste the following template and save it. You can change the value of **JWT_SECRET** to something else to make it more secure.
 
 ```
 GOOGLE_CLIENT_ID=googleclientid.apps.googleusercontent.com
@@ -100,11 +100,6 @@ The three next steps will help you filling the other value of the .env file.
 - In _Authorized redirect URIs_, enter `http://server:5000/api/auth/google/callback` ( for me `http://localhost:5000/api/auth/google/callback`)
 - Grab your **Client ID** and **Client Secret** on the same page
 - Fill the .env at the root of the server with these credentials
-
-## Client
-
-To run the client with nodemon ( allow hot reloading ):
-`npm run client`
 
 # Structure
 
