@@ -23,12 +23,12 @@ Please make sure that you have:
 The entity example in this repo is users, but it can be easily applied to articles, messages, ...
 
 - [x] Clean Structure Component Oriented
-- [ ] Templates to create your own components
+- [ ] Templates to create your own entities
 - [x] Secure Authentification System with email/password using **JWT**.
 - [ ] Emails
 - [x] Get Entity
 - [x] List Entity
-- [ ] Patch Entity ( like edit user)
+- [x] Patch Entity ( like edit user)
 - [x] Delete Entity
 - [x] OAuth 2.0 Authentication via Facebook, Google
 - [x] Easy-to-use endpoints
@@ -56,6 +56,29 @@ FACEBOOK_CLIENT_SECRET=fbclientsecret
 MONGO_URI=mongodb+srv://{user}:{password}@cluster0-ukuem.mongodb.net/test?retryWrites=true&w=majority
 JWT_SECRET=randomString123
 ```
+
+## Setup : OAuth for Facebook Login
+
+- Go on https://developers.facebook.com/apps and create a new app
+- Add Facebook Login to its products
+- In the settings of the Facebook Login Product
+- If your servers runs locally, make sure the facebook app is in development mode
+- If not, add `url-of-server:port/api/auth/facebook/callback` in the field _Valid OAuth Redirect URIs_
+- Grab your **Client ID** and **Client Secret** in _Settings>Basic_
+- Fill the .env at the root of the server with these credentials
+
+## Setup : OAuth for Google Login
+
+- Go on https://console.cloud.google.com/ and create a new app
+- Add Credentials > OAuth client ID
+- In _Authorized JavaScript origins_, enter `http://server:port` ( for me `http://127.0.0.1:5000`)
+- In _Authorized redirect URIs_, enter `http://server:5000/api/auth/google/callback` ( for me `http://localhost:5000/api/auth/google/callback`)
+- Grab your **Client ID** and **Client Secret** on the same page
+- Fill the .env at the root of the server with these credentials
+
+## Setup MongoDB
+
+SOON
 
 ## Client
 
