@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 
+import { Link, withRouter } from "react-router-dom";
 // reactstrap components
 import { Button, Card, Container, Row, Col } from "reactstrap";
 
@@ -88,15 +89,17 @@ class Profile extends React.Component {
                         >
                           Log Out
                         </Button>
-                        <Button
-                          className="float-right"
-                          color="default"
-                          href="#pablo"
-                          onClick={e => e.preventDefault()}
-                          size="sm"
-                        >
-                          Message
-                        </Button>
+                        <Link to="/edit-profile">
+                          <Button
+                            className="float-right"
+                            color="default"
+                            href="#pablo"
+                            size="sm"
+                          >
+                            {" "}
+                            edit
+                          </Button>
+                        </Link>
                       </div>
                     </Col>
                     <Col className="order-lg-1" lg="4">

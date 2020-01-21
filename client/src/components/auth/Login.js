@@ -40,18 +40,22 @@ class Login extends React.Component {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     this.refs.main.scrollTop = 0;
+
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/profile");
     } else {
       let token = null;
+      let refreshToken = null;
       let search = window.location.search;
       let params = new URLSearchParams(search);
       if (params) {
         token = params.get("token");
+        refreshToken = params.get("refresh_token");
 
-        if (token) {
+        if (token && refreshToken) {
           setJWTtoken(token);
+          localStorage.setItem("refreshToken", refreshToken);
           this.props.history.push("/profile");
         }
       }

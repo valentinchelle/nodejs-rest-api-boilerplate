@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
+import { Link, withRouter } from "react-router-dom";
 import { patchUser } from "../../actions/authActions";
 // reactstrap components
 import { Button, Card, Container, Row, Col } from "reactstrap";
@@ -123,9 +124,11 @@ class EditProfile extends React.Component {
                       lg="4"
                     >
                       <div className="card-profile-actions py-4 mt-lg-0">
-                        <Button className="mr-4" color="default" size="sm">
-                          Go back to profile
-                        </Button>
+                        <Link to="/profile">
+                          <Button className="mr-4" color="default" size="sm">
+                            Go back to profile
+                          </Button>
+                        </Link>
                       </div>
                     </Col>
                     <Col className="order-lg-1" lg="4"></Col>

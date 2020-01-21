@@ -22,6 +22,11 @@ export const patchUser = (userData, history) => dispatch => {
   axios
     .patch("/api/users/" + userData.id, userData)
     .then(res => {
+      // We refresh the content of the store
+      let user = store.getState().auth.user;
+      user.email = userData.email;
+      user.name = userData.name;
+      dispatch(setCurrentUser(user));
       return res;
     })
     .catch(err => {
@@ -50,6 +55,8 @@ export const loginUser = userData => dispatch => {
       setAuthToken(token);
       // Decode token to get user data
       const decoded = jwt_decode(token);
+      console.log(decoded);
+
       // Set current user and stores it
       dispatch(setCurrentUser(decoded));
       return decoded;
