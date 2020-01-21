@@ -1,5 +1,4 @@
 import axios from "axios";
-import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 import store from "./../store";
 import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
@@ -23,10 +22,7 @@ export const patchUser = (userData, history) => dispatch => {
     .patch("/api/users/" + userData.id, userData)
     .then(res => {
       // We refresh the content of the store
-      let user = store.getState().auth.user;
-      user.email = userData.email;
-      user.name = userData.name;
-      dispatch(setCurrentUser(user));
+      dispatch(refreshToken());
       return res;
     })
     .catch(err => {
@@ -48,17 +44,10 @@ export const loginUser = userData => dispatch => {
       console.log(res);
       // Set token to localStorage
       const token = res.data.token;
-      const refreshToken = res.data.refreshtoken;
-      localStorage.setItem("jwtToken", token);
-      localStorage.setItem("refreshToken", refreshToken);
+      const refreshToken = res.data.refresh_token;
       // Set token to Auth header
-      setAuthToken(token);
+      var decoded = setAuthToken(token, refreshToken);
       // Decode token to get user data
-      const decoded = jwt_decode(token);
-      console.log(decoded);
-
-      // Set current user and stores it
-      dispatch(setCurrentUser(decoded));
       return decoded;
     })
     .catch(err => {
@@ -68,6 +57,26 @@ export const loginUser = userData => dispatch => {
       });
       return err.response;
     });
+};
+
+export const setAuthToken = (jwtToken, refreshToken) => {
+  // Except the jwttoken to be like : "Bearer adsfkbgasdif"
+  if (jwtToken && refreshToken) {
+    // Apply authorization token to every request if logged in
+
+    localStorage.setItem("jwtToken", jwtToken);
+    localStorage.setItem("refreshToken", refreshToken);
+    axios.defaults.headers.common["Authorization"] = jwtToken;
+    // Decode token to get user data
+    const decoded = jwt_decode(jwtToken);
+    // Set current user
+    store.dispatch(setCurrentUser(decoded));
+    return decoded;
+  } else {
+    // Delete auth header
+    console.log("Couldn't auth. Some tokens might be missing.");
+    delete axios.defaults.headers.common["Authorization"];
+  }
 };
 
 // Used to set a JWT after OAuth
@@ -86,6 +95,7 @@ export const setJWTtoken = raw_token => {
 
 // Set logged in user
 export const setCurrentUser = decoded => {
+  console.log("During dispatching ");
   return {
     type: SET_CURRENT_USER,
     payload: decoded
@@ -105,7 +115,29 @@ export const logoutUser = () => dispatch => {
   localStorage.removeItem("jwtToken");
   localStorage.removeItem("refreshToken");
   // Remove auth header for future requests
-  setAuthToken(false);
+  setAuthToken(false, false);
   // Set current user to empty object {} which will set isAuthenticated to false
   dispatch(setCurrentUser({}));
+};
+
+export const refreshToken = () => dispatch => {
+  axios
+    .post("/api/auth/refresh", {
+      refresh_token: localStorage.getItem("refreshToken")
+    })
+    .then(res => {
+      console.log(res);
+      var jwtToken = res.data.token;
+      var refreshToken = res.data.refresh_token;
+      var decoded = setAuthToken(jwtToken, refreshToken);
+      return decoded;
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response ? err.response : "Unable to refresh the session."
+      });
+      return err;
+    });
 };

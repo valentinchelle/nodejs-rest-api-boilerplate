@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import setAuthToken from "./utils/setAuthToken";
+import { setAuthToken } from "./actions/authActions";
 import { browserHistory } from "react-router";
 
 import { setCurrentUser, logoutUser, setJWTtoken } from "./actions/authActions";
@@ -17,10 +17,16 @@ import Profile from "./components/profile/Profile";
 import EditProfile from "./components/profile/EditProfile";
 import FlashAlert from "./components/layout/FlashAlert";
 // Check for token to keep user logged in
-if (localStorage.jwtToken && localStorage.jwtToken !== "Bearer null") {
+if (
+  localStorage.jwtToken &&
+  localStorage.jwtToken !== "Bearer null" &&
+  localStorage.refreshToken
+) {
   // Set auth token header auth
   const token = localStorage.jwtToken;
-  setAuthToken(token);
+
+  const refreshToken = localStorage.refreshToken;
+  setAuthToken(token, refreshToken);
   // Decode token and get user info and exp
   const decoded = jwt_decode(token);
   // Set user and isAuthenticated
