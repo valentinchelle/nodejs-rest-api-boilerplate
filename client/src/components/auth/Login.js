@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { loginUser, setJWTtoken } from "../../actions/authActions";
+import { loginUser, setAuthToken } from "../../actions/authActions";
 import classnames from "classnames";
 import { Alert } from "reactstrap";
 
@@ -41,7 +41,7 @@ class Login extends React.Component {
     document.scrollingElement.scrollTop = 0;
     this.refs.main.scrollTop = 0;
 
-    // If logged in and user navigates to Login page, should redirect them to dashboard
+    // If logged in and user navigates to Login page, should redirect them to login with the tokens in the query parameters
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/profile");
     } else {
@@ -50,12 +50,11 @@ class Login extends React.Component {
       let search = window.location.search;
       let params = new URLSearchParams(search);
       if (params) {
-        token = params.get("token");
+        // Retrieve the tokens from the query
+        token = "Bearer " + params.get("token");
         refreshToken = params.get("refresh_token");
-
         if (token && refreshToken) {
-          setJWTtoken(token);
-          localStorage.setItem("refreshToken", refreshToken);
+          setAuthToken(token, refreshToken);
           this.props.history.push("/profile");
         }
       }

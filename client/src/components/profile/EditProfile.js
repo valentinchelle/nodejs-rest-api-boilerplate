@@ -26,7 +26,6 @@ class EditProfile extends React.Component {
   constructor(props) {
     super(props);
     const { user } = this.props.auth;
-    console.log(user);
     this.state = {
       id: user.id,
       email: user.email,
@@ -57,7 +56,7 @@ class EditProfile extends React.Component {
     // If also modified password
     if (this.state.password !== "") {
       if (this.state.password !== this.state.password2) {
-        console.log("error : Password not matching !");
+        console.log("[!] Passwords not matching !");
       } else {
         userData.password = this.state.password;
       }

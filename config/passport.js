@@ -77,9 +77,7 @@ module.exports = passport => {
         profileFields: ["id", "displayName", "picture.type(large)", "email"]
       },
       function(token, tokenSecret, profile, done) {
-        // we retrieve the data we need from google
-        console.log("FACEBOOK");
-        console.log(profile);
+        // we retrieve the data we need from facebook
         // We use the loginOAuth defined in the controller of the users
         UsersController.loginOAuth(
           profile.emails[0].value,

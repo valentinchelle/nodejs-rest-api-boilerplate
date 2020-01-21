@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 exports.verifyRefreshBodyField = (req, res, next) => {
-  console.log("verifying refresh token");
+  console.log("[i] Verifying refresh token");
   if (req.body && req.body.refresh_token) {
     return next();
   } else {
@@ -30,7 +30,6 @@ exports.validRefreshNeeded = (req, res, next) => {
 
 // WARNING : The following doesnt verify the jwt. Just verifies its existence.
 exports.JwtNeeded = (req, res, next) => {
-  console.log(req.headers["authorization"]);
   if (req.headers["authorization"]) {
     try {
       let authorization = req.headers["authorization"].split(" ");
@@ -57,7 +56,7 @@ exports.validJWTNeeded = (req, res, next) => {
       if (authorization[0] !== "Bearer") {
         return res.status(403).send();
       } else {
-        console.log("Verifying jwt");
+        console.log("[i] Verifying jwt");
         req.jwt = jwt.verify(authorization[1], process.env.JWT_SECRET);
         return next();
       }

@@ -27,7 +27,6 @@ if (
   const refresh_token = localStorage.refreshToken;
 
   const decoded = setAuthToken(token, refresh_token);
-  console.log(decoded);
   // Set user and isAuthenticated
   store.dispatch(setCurrentUser(decoded));
   // Check for expired token

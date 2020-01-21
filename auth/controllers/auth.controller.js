@@ -22,7 +22,7 @@ exports.generateTokens = (user, cb) => {
         user,
         process.env.JWT_SECRET,
         {
-          expiresIn: 1 // 1 hour in seconds
+          expiresIn: 60 * 30 // 30 min in seconds
         },
         (err, jwttoken) => {
           cb(err, jwttoken, refresh_token);
@@ -47,7 +47,8 @@ exports.refresh_token = (req, res) => {
       const payload = {
         id: user.id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        profilePicture: user.profilePicture
       };
       this.generateTokens(payload, (err, token, refresh_token) => {
         res.json({
@@ -102,10 +103,14 @@ exports.loginUser = (req, res) => {
         const payload = {
           id: user.id,
           name: user.name,
-          email: user.email
+          email: user.email,
+          profilePicture: user.profilePicture
         };
-
+        console.log(payload);
         this.generateTokens(payload, (err, token, refresh_token) => {
+          if (err) {
+            return res.status(400).json({ auth: "Error" });
+          }
           res.json({
             success: true,
             token: "Bearer " + token,
@@ -120,6 +125,7 @@ exports.loginUser = (req, res) => {
 };
 
 exports.loginGoogle = (req, res, next) => {
+  const generateTokens = this.generateTokens;
   passport.authenticate("google", function(err, user, info) {
     if (err) {
       return next(err);
@@ -136,7 +142,10 @@ exports.loginGoogle = (req, res, next) => {
       profilePicture: user.profilePicture
     };
 
-    this.generateTokens(payload, (err, token, refresh_token) => {
+    generateTokens(payload, (err, token, refresh_token) => {
+      if (err) {
+        return res.status(400).json({ auth: "Error" });
+      }
       return res.redirect(
         `http://localhost:3000/login?token=${token}&refresh_token=${refresh_token}`
       );
@@ -145,6 +154,7 @@ exports.loginGoogle = (req, res, next) => {
 };
 
 exports.loginFacebook = (req, res, next) => {
+  const generateTokens = this.generateTokens;
   passport.authenticate("facebook", function(err, user, info) {
     if (err) {
       return next(err);
@@ -162,7 +172,7 @@ exports.loginFacebook = (req, res, next) => {
     };
     // Sign token
 
-    this.generateTokens(payload, (err, token, refresh_token) => {
+    generateTokens(payload, (err, token, refresh_token) => {
       return res.redirect(
         `http://localhost:3000/login?token=${token}&refresh_token=${refresh_token}`
       );

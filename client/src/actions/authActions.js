@@ -74,7 +74,7 @@ export const setAuthToken = (jwtToken, refreshToken) => {
     return decoded;
   } else {
     // Delete auth header
-    console.log("Couldn't auth. Some tokens might be missing.");
+    console.log("[!] Couldn't auth. Some tokens might be missing.");
     delete axios.defaults.headers.common["Authorization"];
   }
 };
@@ -95,7 +95,6 @@ export const setJWTtoken = raw_token => {
 
 // Set logged in user
 export const setCurrentUser = decoded => {
-  console.log("During dispatching ");
   return {
     type: SET_CURRENT_USER,
     payload: decoded
