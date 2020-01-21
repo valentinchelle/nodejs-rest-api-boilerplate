@@ -12,9 +12,9 @@ A boilerplate for **NodeJs** Rest Api. Implements a clean structure, with the be
 You probably know how hard it is to start a node js API, with a well structured and clean code. Especially if you are on a rush for an hackhaton or a school project.
 I give you here a clean code, that implements what is essential for a new API project : a clean nodejs structure implementing a user system following the best practices.
 
-You can directly plug this API with the front end of your choice by calling the different endpoints. I also give details on how to extend this code to adapt it for your project.
+You can directly plug this API with the client of your choice by calling the different endpoints. I also give details on how to extend this code to adapt it for your project.
 
-This API can be used with any front end, here is the front end I have developed with ReactJS to interact with this API.
+This API can be used with any client, here is the client I have developed with ReactJS to interact with this API.
 
 # Features
 
@@ -202,25 +202,31 @@ const User = decode(jwt);
 
 ## The steps
 
+#### Authenticate a user
+
 Here is the different request between the server and the font end to handle the authentication.
 
-1. The user enters its credentials on the front end
-2. The front end sends the credentials to the server
+1. The user enters its credentials on the client
+2. The client sends the credentials to the server
 3. The server compares the credentials with the database
-4. The server sends back to the front end a _jwt token_ ( containing information about the user ) and a _refresh token_
-5. The front end extracts the token, sets the Authorization Headers of the next requests to `Bearer + token_value`
+4. The server sends back to the client a **jwt token** ( containing information about the user ) and a **refresh token**
+5. The client extracts the token, sets the Authorization Headers of the next requests to `Bearer + token_value`
 
-Now that the front end registered the _jwt token_ and the _refresh token_, let's say the user tries to access
+#### Give Access
 
-6. the front end sends a request to the server, with the _jwt token_ in Authorization headers
+Now that the client registered the **jwt token**and the **refresh token**, let's say the user tries to access a protected resource
+
+6. the client sends a request to the server, with the **jwt token** in Authorization headers
 7. the back end checks the validity of the _jwt token_, and if it is valid, return a response
 
-The subititly is that for the system to be secure enough, the _jwt token_ is encrypted with a limited lifetime.
-If the front end detects that the *jwt token*is expired, it needs a new one. Here is the process :
+#### Refresh the token
 
-1. The front end sends the _expired jwt token_ along with the _refresh token_
+The subititly is that for the system to be secure enough, the **jwt token** is encrypted with a limited lifetime.
+If the client detects that the **jwt token** is expired, it needs a new one. Here is the process :
+
+1. The client sends the expired **jwt token** along with the **refresh token**
 2. The back end checks the validity of the refresh token, and generates a new _jwt token_
-3. The backend sends back the same _refresh token_ and the new _jwt token_
+3. The backend sends back the same **refresh token** and the new _jwt token_
 
 ## Step 1 : Login with credentials
 
@@ -248,7 +254,7 @@ The access token is the famous `json web token`. It is a stateless string that w
 
 ## Step 2 : Stay logged with the JWT
 
-In order to make your users stay logged on your app, you have to provide the jwt for each request. To do that, on the front end side, grab the `accessToken` from the previous request, prefix it with `Bearer` and add it to the request headers under Authorization.
+In order to make your users stay logged on your app, you have to provide the jwt for each request. To do that, on the client side, grab the `accessToken` from the previous request, prefix it with `Bearer` and add it to the request headers under Authorization.
 This will be required for every route with the middleware `ValidationMiddleware.validJWTNeeded` like :
 
 ```
@@ -262,7 +268,7 @@ This will be required for every route with the middleware `ValidationMiddleware.
 
 # Security Concerns
 
-At the end of the OAuth, the jwt is sent via a get request to the front end, so it could possibly appear in the history/logs of the server...
+At the end of the OAuth, the jwt is sent via a get request to the client, so it could possibly appear in the history/logs of the server...
 
 # References
 
