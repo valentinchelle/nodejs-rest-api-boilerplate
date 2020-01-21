@@ -1,3 +1,10 @@
+<h3 align="center">
+  Nodejs Boilerplate
+</h3>
+<p align="center">
+  A powerful boilerplate **API** with Google and Facebook Login.
+</p>
+
 # NodeJs Api Boilerplate
 
 A boilerplate for **NodeJs** Rest Api. Implements a clean structure, with the best practices for authentication, including OAuth for _Google Login_ and _Facebook Login_.
@@ -9,45 +16,54 @@ You can directly plug this API with the front end of your choice by calling the 
 
 This API can be used with any front end, here is the front end I have developed with ReactJS to interact with this API.
 
-# Prerequisites
-
-Please make sure that you have:
-
-- node.js installed (https://nodejs.org/)
-- have mongodb installed and running locally (https://www.mongodb.com/)
-  - Using Windows, just open the terminal at where you installed mongo and run `mongod.exe`
-- run `npm install` in your root project folder
-- if you want to use the react, run `cd client` and `npm install`
-
 # Features
 
 (STILL IN DEVELOMENT)
 The entity example in this repo is users, but it can be easily applied to articles, messages, ...
 
+- [x] **Secure Authentification** with email/password using **JWT**
+- [x] **OAuth 2.0 Authentication** via Facebook, Google, GitHub, LinkedIn, Instagram
 - [x] Clean Structure Component Oriented
 - [ ] Templates to create your own entities
-- [x] Secure Authentification System with email/password using **JWT**
 - [x] Get Entity
 - [x] List Entity
 - [x] Patch Entity
 - [x] Delete Entity
-- [x] OAuth 2.0 Authentication via Facebook, Google
+- [x] Use Passport
 - [x] Easy-to-use endpoints
 - [x] Middlewares to ensure authentification and permission to access resources.
 
-# Usage
+# SETUP
 
-## Server
+## Prerequisites
 
-To run the server, please use a command line the following:
+Please make sure that you have:
 
-- npm start
+- node.js installed (https://nodejs.org/)
 
-  - It will run the server at port 3600.
+## Getting Started
 
-- mongodb configuration in common/services/mongoose.service
+The easiest way to get started is to clone the repository:
 
-- Add a file `.env` at the root of the folder (same level as `index.js`), copy paste the following template and fill it with the right information like :
+```
+# Get the latest snapshot
+git clone https://github.com/valentinchelle/nodejs-rest-api-boilerplate.git myproject
+
+# Change directory
+cd myproject
+
+# Install NPM dependencies
+npm install
+
+# Then simply start your app
+npm start
+```
+
+## Configuration of the environment
+
+To use all the functionnalities, you will need to set the environment variables.
+
+Firstly, add a file named `.env` at the root of the folder (same level as `index.js`), copy paste the following template and save it. You can change the value of JWT_SECRET to something else to make it more secure.
 
 ```
 GOOGLE_CLIENT_ID=googleclientid.apps.googleusercontent.com
@@ -57,6 +73,14 @@ FACEBOOK_CLIENT_SECRET=fbclientsecret
 MONGO_URI=mongodb+srv://{user}:{password}@cluster0-ukuem.mongodb.net/test?retryWrites=true&w=majority
 JWT_SECRET=randomString123
 ```
+
+The three next steps will help you filling the other value of the .env file.
+
+## Setup : MongoDB
+
+- Create a new account on https://cloud.mongodb.com/ and choose the free plan
+- On the homepage, click on _Connect > Connect your application > _
+- Copy the **Connection String**, replace <password> by your actual password, and paste in the .env as _MONGO_URI_
 
 ## Setup : OAuth for Facebook Login
 
@@ -76,12 +100,6 @@ JWT_SECRET=randomString123
 - In _Authorized redirect URIs_, enter `http://server:5000/api/auth/google/callback` ( for me `http://localhost:5000/api/auth/google/callback`)
 - Grab your **Client ID** and **Client Secret** on the same page
 - Fill the .env at the root of the server with these credentials
-
-## Setup : MongoDB
-
-- Create a new account on https://cloud.mongodb.com/ and choose the free plan
-- On the homepage, click on _Connect > Connect your application > _
-- Copy the **Connection String**, replace <password> by your actual password, and paste in the .env as _MONGO_URI_
 
 ## Client
 
