@@ -200,7 +200,7 @@ const User = decode(jwt);
 }
 ```
 
-## The steps
+## The authentication steps
 
 #### Authenticate a user
 
@@ -217,7 +217,7 @@ Here is the different request between the server and the font end to handle the 
 Now that the client registered the **jwt token**and the **refresh token**, let's say the user tries to access a protected resource
 
 6. the client sends a request to the server, with the **jwt token** in Authorization headers
-7. the back end checks the validity of the _jwt token_, and if it is valid, return a response
+7. the server checks the validity of the **jwt token**, and if it is valid, returns a result
 
 #### Refresh the token
 
@@ -225,8 +225,8 @@ The subititly is that for the system to be secure enough, the **jwt token** is e
 If the client detects that the **jwt token** is expired, it needs a new one. Here is the process :
 
 1. The client sends the expired **jwt token** along with the **refresh token**
-2. The back end checks the validity of the refresh token, and generates a new _jwt token_
-3. The backend sends back the same **refresh token** and the new _jwt token_
+2. The server checks the validity of the refresh token, and generates a new **jwt token**
+3. The server sends back the same **refresh token** and the new **jwt token**
 
 ## Step 1 : Login with credentials
 
