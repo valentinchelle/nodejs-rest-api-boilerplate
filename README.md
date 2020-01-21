@@ -20,11 +20,13 @@ Please make sure that you have:
 # Features
 
 (STILL IN DEVELOMENT)
+The entity example in this repo is users, but it can be easily applied to articles, messages, ...
 
 - [x] Clean Structure Component Oriented
 - [ ] Templates to create your own components
 - [x] Secure Authentification System with email/password using **JWT**.
 - [ ] Emails
+- [x] Get Entity
 - [x] List Entity
 - [ ] Patch Entity ( like edit user)
 - [x] Delete Entity
@@ -74,6 +76,19 @@ The global logic for an app calling this rest API :
 The app will call an API route ( like `url/api/users/modifyuser` ). The router makes the request pass through the middleware (`isConnected()`) towards the controller action (`modifyUser()`). The controller action will then call the model to modify a record in the table.
 
 ## Api Endpoints
+
+#### Endpoints for the authentification
+
+| Endpoint                  | Body Request Fields                               | Description                        |
+| ------------------------- | ------------------------------------------------- | ---------------------------------- |
+| `POST /api/auth/login`    | {email : "", password:""}                         | Login the user                     |
+| `POST /api/auth/register` | {email : "", name:"", password :"", password2:""} | Creates a new user.                |
+| `GET /api/auth/google`    |                                                   | Entry point for the Google Oauth   |
+| `GET /api/auth/facebook`  |                                                   | Entry point for the Facebook Oauth |
+
+#### Endpoints for Entities ( Users )
+
+This is the usual API endpoints for a given entity ( here the users ):
 
 | Endpoint                | Token Needed | Body Request    | Description                            |
 | ----------------------- | ------------ | --------------- | -------------------------------------- |

@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
-
+const bcrypt = require("bcryptjs");
 exports.verifyRefreshBodyField = (req, res, next) => {
   console.log("verifying refresh token");
   if (req.body && req.body.refresh_token) {
@@ -11,18 +10,22 @@ exports.verifyRefreshBodyField = (req, res, next) => {
 };
 
 exports.validRefreshNeeded = (req, res, next) => {
-  let b = new Buffer(req.body.refresh_token, "base64");
-  let refresh_token = b.toString();
-  let hash = crypto
-    .createHmac("sha512", req.jwt.refreshKey)
-    .update(req.jwt.userId + process.env.JWT_SECRET)
-    .digest("base64");
-  if (hash === refresh_token) {
-    req.body = req.jwt;
-    return next();
-  } else {
-    return res.status(400).send({ error: "Invalid refresh token" });
-  }
+  // We get the refresh token provided by the user
+  var refresh_token = req.body.refresh_token;
+
+  // We use bcrypt to compare the hash with req.jwt.userId + process.env.JWT_SECRET
+  bcrypt.compare(
+    req.jwt.userId + process.env.JWT_SECRET,
+    refresh_token,
+    function(err, res) {
+      if (err) {
+        return res.status(400).send({ error: "Invalid refresh token" });
+      } else {
+        req.body = req.jwt;
+        return next();
+      }
+    }
+  );
 };
 
 exports.validJWTNeeded = (req, res, next) => {

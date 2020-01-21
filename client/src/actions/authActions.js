@@ -17,16 +17,35 @@ export const registerUser = (userData, history) => dispatch => {
     );
 };
 
+// Patch User
+export const patchUser = (userData, history) => dispatch => {
+  axios
+    .patch("/api/users/" + userData.id, userData)
+    .then(res => {
+      return res;
+    })
+    .catch(err => {
+      console.log(err);
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response ? err.response : "Unknown Error"
+      });
+      return err;
+    });
+};
+
 // Login - get user token
 export const loginUser = userData => dispatch => {
   axios
     .post("/api/auth/login", userData)
     .then(res => {
       // Save to localStorage
-
+      console.log(res);
       // Set token to localStorage
-      const { token } = res.data;
+      const token = res.data.token;
+      const refreshToken = res.data.refreshtoken;
       localStorage.setItem("jwtToken", token);
+      localStorage.setItem("refreshToken", refreshToken);
       // Set token to Auth header
       setAuthToken(token);
       // Decode token to get user data
@@ -77,6 +96,7 @@ export const setUserLoading = () => {
 export const logoutUser = () => dispatch => {
   // Remove token from local storage
   localStorage.removeItem("jwtToken");
+  localStorage.removeItem("refreshToken");
   // Remove auth header for future requests
   setAuthToken(false);
   // Set current user to empty object {} which will set isAuthenticated to false

@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 
 const AuthController = require("./controllers/auth.controller");
+const AuthMiddleware = require("./middlewares/auth.middleware");
 
 // GOOGLE
 router.get(
@@ -31,5 +32,12 @@ router.post("/register", AuthController.registerUser);
 // @desc Login user and return JWT token
 // @access Public
 router.post("/login", AuthController.loginUser);
+
+router.post("/refresh", [
+  AuthMiddleware.validJWTNeeded,
+  AuthMiddleware.verifyRefreshBodyField,
+  AuthMiddleware.validRefreshNeeded,
+  AuthController.refresh_token
+]);
 
 module.exports = router;

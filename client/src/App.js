@@ -14,6 +14,7 @@ import Login from "./components/auth/Login";
 
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Profile from "./components/profile/Profile";
+import EditProfile from "./components/profile/EditProfile";
 import FlashAlert from "./components/layout/FlashAlert";
 // Check for token to keep user logged in
 if (localStorage.jwtToken && localStorage.jwtToken !== "Bearer null") {
@@ -44,8 +45,14 @@ class App extends Component {
             <Route exact path="/" component={Landing} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+
             <Switch>
               <PrivateRoute exact path="/profile" component={Profile} />
+              <PrivateRoute
+                exact
+                path="/edit-profile"
+                component={EditProfile}
+              />
             </Switch>
           </div>
         </Router>

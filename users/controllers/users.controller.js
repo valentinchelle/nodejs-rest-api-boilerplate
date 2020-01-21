@@ -3,15 +3,15 @@ const bcrypt = require("bcryptjs");
 
 exports.insert = (req, res) => {
   console.log("[i] Inserting new user");
-  User.findOne({ email: req.body.email }).then(user => {
+  UserModel.model.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({ email: "Email already exists" });
     } else {
-      const newUser = new User({
+      const newUser = {
         name: req.body.name,
         email: req.body.email,
         password: req.body.password
-      });
+      };
 
       // Hash password before saving in database
       bcrypt.genSalt(10, (err, salt) => {
@@ -52,7 +52,7 @@ exports.loginOAuth = (
   */
   // We lookup if already exist
   console.log("[i] Login via Oauth");
-  User.findOne(
+  UserModel.model.findOne(
     { OAuthId: id_provider, OAuthProvider: provider, email: email },
     (err, userMatch) => {
       // handle errors here:
@@ -68,14 +68,14 @@ exports.loginOAuth = (
         console.log("[i] Creating new user");
         console.log(email);
         // creating the new user
-        const newUser0Auth = new User({
+        const newUser0Auth = {
           OAuthProvider: provider,
           OAuthId: id_provider,
           name: name,
           familyname: familyName,
           profilePicture: picture,
           email: email
-        });
+        };
         UserModel.create(newUser0Auth)
           .then(user => {
             console.log("[i] User Created!");
