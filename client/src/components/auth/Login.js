@@ -2,9 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { loginUser } from "../../actions/authActions";
+import { loginUser, setJWTtoken } from "../../actions/authActions";
 import classnames from "classnames";
 import { Alert } from "reactstrap";
+
 // reactstrap components
 import {
   Button,
@@ -42,8 +43,21 @@ class Login extends React.Component {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/profile");
+    } else {
+      let token = null;
+      let search = window.location.search;
+      let params = new URLSearchParams(search);
+      if (params) {
+        token = params.get("token");
+
+        if (token) {
+          setJWTtoken(token);
+          this.props.history.push("/profile");
+        }
+      }
     }
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push("/profile");
@@ -67,8 +81,7 @@ class Login extends React.Component {
       email: this.state.email,
       password: this.state.password
     };
-
-    const output = this.props.loginUser(userData);
+    this.props.loginUser(userData);
   };
 
   render() {
