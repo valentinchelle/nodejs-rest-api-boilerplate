@@ -225,7 +225,7 @@ The subititly is that for the system to be secure enough, the **jwt token** is e
 If the client detects that the **jwt token** is expired, it needs a new one. Here is the process :
 
 1. The client sends the expired **jwt token** along with the **refresh token**
-2. The server checks the validity of the refresh token, and generates a new **jwt token**
+2. The server checks the validity of the **refresh token**, and generates a new **jwt token**
 3. The server sends back the same **refresh token** and the new **jwt token**
 
 ## Step 1 : Login with credentials
@@ -278,6 +278,7 @@ https://github.com/goldbergyoni/nodebestpractices/tree/security-best-practices-s
 # Credits
 
 This project has been largely inspired by the following work :
+https://github.com/gothinkster/node-express-realworld-example-app/blob/master/routes/api/articles.js
 
 https://github.com/makinhs/rest-api-tutorial
 

@@ -4,7 +4,9 @@ const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 const passport = require("passport");
 // Load User model
-const User = require("../../users/models/User");
+
+const mongoose = require("mongoose");
+var User = mongoose.model("User");
 const UsersController = require("../../users/controllers/users.controller");
 
 exports.generateTokens = (user, cb) => {
@@ -22,7 +24,7 @@ exports.generateTokens = (user, cb) => {
         user,
         process.env.JWT_SECRET,
         {
-          expiresIn: 60 * 30 // 30 min in seconds
+          expiresIn: 60 * 60 // 30 min in seconds
         },
         (err, jwttoken) => {
           cb(err, jwttoken, refresh_token);
@@ -39,7 +41,7 @@ exports.refresh_token = (req, res) => {
   try {
     req.body = req.jwt;
     const userId = req.body.id;
-    User.model.findOne({ _id: userId }).then(user => {
+    User.findOne({ _id: userId }).then(user => {
       // Check if user exists
       if (!user) {
         return res.status(404).json({ auth: "Email not found" });
@@ -89,7 +91,7 @@ exports.loginUser = (req, res) => {
   const password = req.body.password;
 
   // Find user by email
-  User.model.findOne({ email }).then(user => {
+  User.findOne({ email }).then(user => {
     // Check if user exists
     if (!user) {
       return res.status(404).json({ auth: "Email not found" });

@@ -44,15 +44,11 @@ const userSchema = new Schema({
   permissionLevel: Number
 });
 
-const Model = mongoose.model("Users", userSchema);
-
-exports.model = Model;
 // General Function for a model
-exports.findByEmail = email => {
+userSchema.methods.findByEmail = email => {
   return Model.find({ email: email });
 };
-
-exports.findById = id => {
+userSchema.methods.findById = id => {
   return Model.findById(id).then(result => {
     result = result.toJSON();
     delete result._id;
@@ -61,27 +57,39 @@ exports.findById = id => {
   });
 };
 
-exports.create = userData => {
-  const user = new Model(userData);
-  return user.save();
+userSchema.methods.create = dataEntity => {
+  const new_entity = new Model(dataEntity);
+  return new_entity.save();
 };
 
-exports.list = (perPage, page) => {
+userSchema.methods.list = (perPage, page) => {
   return new Promise((resolve, reject) => {
     Model.find()
       .limit(perPage)
       .skip(perPage * page)
-      .exec(function(err, users) {
+      .exec(function(err, entities) {
         if (err) {
           reject(err);
         } else {
-          resolve(users);
+          resolve(entities);
         }
       });
   });
 };
 
-exports.patch = (id, userData) => {
+userSchema.methods.removeById = id => {
+  return new Promise((resolve, reject) => {
+    Model.remove({ _id: id }, err => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(err);
+      }
+    });
+  });
+};
+
+userSchema.methods.patch = (id, userData) => {
   delete userData["permissionLevel"];
   delete userData["id"];
   // needs to Ensure no collision
@@ -99,14 +107,4 @@ exports.patch = (id, userData) => {
   });
 };
 
-exports.removeById = userId => {
-  return new Promise((resolve, reject) => {
-    Model.remove({ _id: userId }, err => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(err);
-      }
-    });
-  });
-};
+mongoose.model("User", userSchema);

@@ -22,7 +22,7 @@ exports.onlySameUserOrAdminCanDoThisAction = (req, res, next) => {
   if (req.params && req.params.userId && userId === req.params.userId) {
     return next();
   } else {
-    if (user_permission_level & ADMIN_PERMISSION) {
+    if (user_permission_level & ADMIN) {
       return next();
     } else {
       console.log("Not same user.");

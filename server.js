@@ -3,8 +3,13 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 
+// We load the Models
+require("./users//models/User");
+require("./posts//models/Post");
+
 const authRouter = require("./auth/auth.routes");
 const usersRouter = require("./users/users.routes");
+const postsRouter = require("./posts/posts.routes");
 require("dotenv").config();
 const app = express();
 app.use(function(req, res, next) {
@@ -42,6 +47,7 @@ require("./config/passport")(passport);
 // Routes
 app.use("/api/users", usersRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/posts", postsRouter);
 
 app.get("/favicon.ico", (req, res) => {
   res.end();
