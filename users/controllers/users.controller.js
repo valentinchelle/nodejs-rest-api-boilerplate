@@ -1,9 +1,9 @@
-const UserModel = require("../models/User");
 const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
+var User = mongoose.model("User");
 
 exports.insert = (req, res) => {
-  console.log("[i] Inserting new user");
-  UserModel.model.findOne({ email: req.body.email }).then(user => {
+  User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({ email: "Email already exists" });
     } else {
@@ -19,7 +19,7 @@ exports.insert = (req, res) => {
           if (err) throw err;
           newUser.password = hash;
           // Calling the model to create the user
-          UserModel.create(newUser)
+          User.create(newUser)
             .then(user => {
               console.log("[i] User Created!");
               res.json(user);
@@ -52,7 +52,7 @@ exports.loginOAuth = (
   */
   // We lookup if already exist
   console.log("[i] Login via Oauth");
-  UserModel.model.findOne(
+  User.findOne(
     { OAuthId: id_provider, OAuthProvider: provider, email: email },
     (err, userMatch) => {
       // handle errors here:
@@ -76,7 +76,7 @@ exports.loginOAuth = (
           profilePicture: picture,
           email: email
         };
-        UserModel.create(newUser0Auth)
+        User.create(newUser0Auth)
           .then(user => {
             console.log("[i] User Created!");
             cb_success(user);
@@ -99,14 +99,14 @@ exports.list = (req, res) => {
       page = Number.isInteger(req.query.page) ? req.query.page : 0;
     }
   }
-  console.log(UserModel.list);
-  UserModel.list(limit, page).then(result => {
+  console.log(User.list);
+  User.list(limit, page).then(result => {
     res.status(200).send(result);
   });
 };
 
 exports.getById = (req, res) => {
-  UserModel.findById(req.params.userId).then(result => {
+  User.findById(req.params.userId).then(result => {
     res.status(200).send(result);
   });
 };
@@ -126,21 +126,21 @@ exports.patchById = (req, res) => {
         if (err) throw err;
         newUser.password = hash;
 
-        UserModel.patch(req.params.userId, newUser).then(result => {
+        User.patch(req.params.userId, newUser).then(result => {
           console.log(result);
           res.status(204).send({});
         });
       });
     });
   } else {
-    UserModel.patch(req.params.userId, req.body).then(result => {
+    User.patch(req.params.userId, req.body).then(result => {
       console.log(result);
       res.status(204).send({});
     });
   }
 };
 exports.removeById = (req, res) => {
-  UserModel.removeById(req.params.userId).then(result => {
+  User.removeById(req.params.userId).then(result => {
     res.status(204).send({});
   });
 };
