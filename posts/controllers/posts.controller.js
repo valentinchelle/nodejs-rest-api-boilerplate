@@ -8,9 +8,8 @@ exports.insert = (req, res, next) => {
   User.findById(req.jwt.id)
     .then(function(user) {
       if (!user) {
-        return res.sendStatus(401);
+        res.sendStatus(401);
       }
-
       var post = new Post(req.body.post);
 
       post.author = user;
@@ -18,15 +17,16 @@ exports.insert = (req, res, next) => {
       return post
         .save()
         .then(function() {
-          console.log(post);
-          return res.json({ post });
+          res.json({ post });
         })
         .catch(e => {
-          return res.sendStatus(400);
+          console.log(e);
+          res.sendStatus(400);
         });
     })
     .catch(e => {
-      return res.sendStatus(406);
+      console.log(e);
+      res.sendStatus(406);
     });
 };
 
@@ -57,6 +57,22 @@ exports.patchById = (req, res) => {
     })
     .catch(e => {
       console.log(e);
-      return res.sendStatus(400);
+      res.sendStatus(400);
+    });
+};
+
+exports.list = (req, res) => {
+  var page = 0;
+  if (req.params.page) {
+    page = req.params.page;
+  }
+  Post.list(20, page)
+    .then(result => {
+      console.log(result);
+      res.send(result).status(204);
+    })
+    .catch(e => {
+      console.log(e);
+      res.sendStatus(400);
     });
 };

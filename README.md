@@ -32,6 +32,8 @@ The entity example in this repo is users, but it can be easily applied to articl
 - [x] Use Passport
 - [x] Easy-to-use endpoints
 - [x] Middlewares to ensure authentification and permission to access resources.
+- [ ] Implemented unit test
+- [ ] Posts
 
 # Getting Started
 

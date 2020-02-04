@@ -163,6 +163,14 @@ class DemoNavbar extends React.Component {
                       <DropdownItem to="/login" tag={Link}>
                         Login
                       </DropdownItem>
+                      <DropdownItem to="/addpost" tag={Link}>
+                        Add Post
+                      </DropdownItem>
+
+                      <DropdownItem to="/posts" tag={Link}>
+                        List Posts
+                      </DropdownItem>
+
                       <DropdownItem to="/register" tag={Link}>
                         Register
                       </DropdownItem>

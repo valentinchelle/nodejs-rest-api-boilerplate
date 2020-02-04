@@ -19,7 +19,7 @@ EntitySchema.statics.create = dataEntity => {
   return new_entity.save();
 };
 
-EntitySchema.statics.list = (perPage, page) => {
+EntitySchema.statics.list = function(perPage, page) {
   return new Promise((resolve, reject) => {
     this.find()
       .limit(perPage)
@@ -34,7 +34,7 @@ EntitySchema.statics.list = (perPage, page) => {
   });
 };
 
-EntitySchema.statics.removeById = id => {
+EntitySchema.statics.removeById = function(id) {
   return new Promise((resolve, reject) => {
     this.remove({ _id: id }, err => {
       if (err) {
@@ -64,7 +64,7 @@ EntitySchema.statics.patch = function(id, entityData) {
 };
 
 // Custom methods
-EntitySchema.statics.findBySlug = slug => {
+EntitySchema.statics.findBySlug = function(slug) {
   return this.find({ slug: slug });
 };
 

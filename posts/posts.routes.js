@@ -19,4 +19,7 @@ router.patch("/:id", [
   PostPermissionMiddleware.onlyAuthorOrAdminCanDoThisAction,
   PostsController.patchById
 ]);
+
+router.get("/feed/:page", [PostsController.list]);
+
 module.exports = router;

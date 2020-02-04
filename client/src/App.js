@@ -16,6 +16,8 @@ import PrivateRoute from "./components/private-route/PrivateRoute";
 import Profile from "./components/profile/Profile";
 import EditProfile from "./components/profile/EditProfile";
 import FlashAlert from "./components/layout/FlashAlert";
+import AddPost from "./components/posts/AddPost";
+import ListPosts from "./components/posts/ListPosts";
 // Check for token to keep user logged in
 if (
   localStorage.jwtToken &&
@@ -47,7 +49,8 @@ class App extends Component {
             <Route exact path="/" component={Landing} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-
+            <Route exact path="/addpost" component={AddPost} />
+            <Route exact path="/posts/" component={ListPosts} />
             <Switch>
               <PrivateRoute exact path="/profile" component={Profile} />
               <PrivateRoute
