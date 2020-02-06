@@ -22,7 +22,10 @@ exports.insert = (req, res) => {
           User.create(newUser)
             .then(user => {
               console.log("[i] User Created!");
-              res.json(user);
+              let userobject = user.toObject();
+
+              delete userobject.password;
+              res.json(userobject);
             })
             .catch(function(error) {
               console.log(err);
@@ -99,7 +102,6 @@ exports.list = (req, res) => {
       page = Number.isInteger(req.query.page) ? req.query.page : 0;
     }
   }
-  console.log(User.list);
   User.list(limit, page).then(result => {
     res.status(200).send(result);
   });

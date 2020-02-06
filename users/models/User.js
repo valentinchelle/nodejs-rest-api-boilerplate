@@ -23,7 +23,8 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: false
+    required: false,
+    select: false
   },
   date: {
     type: Date,
@@ -45,11 +46,11 @@ const userSchema = new Schema({
 });
 
 // General Function for a model
-userSchema.methods.findByEmail = email => {
-  return Model.find({ email: email });
+userSchema.statics.findByEmail = function(email) {
+  return this.find({ email: email });
 };
-userSchema.methods.findById = id => {
-  return Model.findById(id).then(result => {
+userSchema.statics.findById = function(id) {
+  return this.findById(id).then(result => {
     result = result.toJSON();
     delete result._id;
     delete result.__v;
@@ -57,14 +58,14 @@ userSchema.methods.findById = id => {
   });
 };
 
-userSchema.methods.create = dataEntity => {
-  const new_entity = new Model(dataEntity);
+userSchema.statics.create = function(dataEntity) {
+  const new_entity = new this(dataEntity);
   return new_entity.save();
 };
 
-userSchema.methods.list = (perPage, page) => {
+userSchema.statics.list = function(perPage, page) {
   return new Promise((resolve, reject) => {
-    Model.find()
+    this.find()
       .limit(perPage)
       .skip(perPage * page)
       .exec(function(err, entities) {
@@ -77,9 +78,9 @@ userSchema.methods.list = (perPage, page) => {
   });
 };
 
-userSchema.methods.removeById = id => {
+userSchema.statics.removeById = function(id) {
   return new Promise((resolve, reject) => {
-    Model.remove({ _id: id }, err => {
+    this.remove({ _id: id }, err => {
       if (err) {
         reject(err);
       } else {
@@ -89,12 +90,12 @@ userSchema.methods.removeById = id => {
   });
 };
 
-userSchema.methods.patch = (id, userData) => {
+userSchema.statics.patch = function(id, userData) {
   delete userData["permissionLevel"];
   delete userData["id"];
   // needs to Ensure no collision
   return new Promise((resolve, reject) => {
-    Model.findById(id, function(err, user) {
+    this.findById(id, function(err, user) {
       if (err) reject(err);
       for (let i in userData) {
         user[i] = userData[i];

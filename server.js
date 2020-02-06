@@ -31,12 +31,13 @@ app.use(bodyParser.json());
 
 // DB Config
 const db = process.env.MONGO_URI;
-
-// Connect to MongoDB
-mongoose
-  .connect(db, { useNewUrlParser: true })
-  .then(() => console.log("MongoDB successfully connected"))
-  .catch(err => console.log(err));
+if (process.env.NODE_ENV != "test") {
+  // Connect to MongoDB
+  mongoose
+    .connect(db, { useNewUrlParser: true })
+    .then(() => console.log("MongoDB successfully connected"))
+    .catch(err => console.log(err));
+}
 
 // Passport middleware
 app.use(passport.initialize());

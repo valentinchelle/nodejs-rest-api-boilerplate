@@ -91,39 +91,41 @@ exports.loginUser = (req, res) => {
   const password = req.body.password;
 
   // Find user by email
-  User.findOne({ email }).then(user => {
-    // Check if user exists
-    if (!user) {
-      return res.status(404).json({ auth: "Email not found" });
-    }
-
-    // Check password
-    bcrypt.compare(password, user.password).then(isMatch => {
-      if (isMatch) {
-        // User matched
-        // Create JWT Payload
-        const payload = {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          profilePicture: user.profilePicture
-        };
-        console.log(payload);
-        this.generateTokens(payload, (err, token, refresh_token) => {
-          if (err) {
-            return res.status(400).json({ auth: "Error" });
-          }
-          res.json({
-            success: true,
-            token: "Bearer " + token,
-            refresh_token: refresh_token
-          });
-        });
-      } else {
-        return res.status(400).json({ auth: "Password incorrect" });
+  User.findOne({ email })
+    .select("+password")
+    .then(user => {
+      // Check if user exists
+      if (!user) {
+        return res.status(404).json({ auth: "Email not found" });
       }
+
+      // Check password
+      bcrypt.compare(password, user.password).then(isMatch => {
+        if (isMatch) {
+          // User matched
+          // Create JWT Payload
+          const payload = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            profilePicture: user.profilePicture
+          };
+          console.log(payload);
+          this.generateTokens(payload, (err, token, refresh_token) => {
+            if (err) {
+              return res.status(400).json({ auth: "Error" });
+            }
+            res.json({
+              success: true,
+              token: "Bearer " + token,
+              refresh_token: refresh_token
+            });
+          });
+        } else {
+          return res.status(400).json({ auth: "Password incorrect" });
+        }
+      });
     });
-  });
 };
 
 exports.loginGoogle = (req, res, next) => {

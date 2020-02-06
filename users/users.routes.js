@@ -10,7 +10,7 @@ const ADMIN = config.permissionLevels.ADMIN;
 const PAID = config.permissionLevels.PAID_USER;
 const FREE = config.permissionLevels.NORMAL_USER;
 
-router.get("/", [AuthMiddleware.validJWTNeeded, UsersController.list]);
+router.get("/", [UsersController.list]);
 router.get("/:userId", [
   AuthMiddleware.validJWTNeeded,
   PermissionsMiddleware.onlySameUserOrAdminCanDoThisAction,
