@@ -17,7 +17,9 @@ app.use(function(req, res, next) {
   if (req.method === "OPTIONS") {
     return res.send(200);
   } else {
-    console.log(req.originalUrl);
+    if (process.env.NODE_ENV != "test") {
+      console.log(req.originalUrl);
+    }
     return next();
   }
 });
@@ -57,4 +59,8 @@ app.get("/favicon.ico", (req, res) => {
 });
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => console.log(`Server up and running on port ${port} !`));
+app.listen(port, () => {
+  if (process.env.NODE_ENV != "test") {
+    console.log(`Server up and running on port ${port} !`);
+  }
+});

@@ -10,7 +10,6 @@ exports.onlyAuthorOrAdminCanDoThisAction = (req, res, next) => {
   let user_permission_level = parseInt(req.jwt.permissionLevel);
   let userId = req.jwt.id;
   let postid = req.params.id;
-
   if (user_permission_level & ADMIN_PERMISSION) {
     return next();
   } else {
@@ -19,14 +18,15 @@ exports.onlyAuthorOrAdminCanDoThisAction = (req, res, next) => {
         if (post.author == userId) {
           return next();
         } else {
-          console.log(post.author);
-          console.log(userId);
-          console.log("Not same user.");
-          return res.status(403).send();
+          return res
+            .status(403)
+            .send({ error: "Not authorized to edit this post" });
         }
       })
       .catch(() => {
-        return res.status(403).send();
+        return res
+          .status(403)
+          .send({ error: "This post doesn't seem to exist" });
       });
   }
 };

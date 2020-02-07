@@ -49,15 +49,16 @@ const userSchema = new Schema({
 userSchema.statics.findByEmail = function(email) {
   return this.find({ email: email });
 };
+/*
 userSchema.statics.findById = function(id) {
-  return this.findById(id).then(result => {
+  return super.findById(id).then(result => {
     result = result.toJSON();
     delete result._id;
     delete result.__v;
     return result;
   });
 };
-
+*/
 userSchema.statics.create = function(dataEntity) {
   const new_entity = new this(dataEntity);
   return new_entity.save();
@@ -80,7 +81,7 @@ userSchema.statics.list = function(perPage, page) {
 
 userSchema.statics.removeById = function(id) {
   return new Promise((resolve, reject) => {
-    this.remove({ _id: id }, err => {
+    this.deleteOne({ _id: id }, err => {
       if (err) {
         reject(err);
       } else {
@@ -93,6 +94,7 @@ userSchema.statics.removeById = function(id) {
 userSchema.statics.patch = function(id, userData) {
   delete userData["permissionLevel"];
   delete userData["id"];
+
   // needs to Ensure no collision
   return new Promise((resolve, reject) => {
     this.findById(id, function(err, user) {

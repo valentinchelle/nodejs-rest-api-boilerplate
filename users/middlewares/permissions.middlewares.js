@@ -7,11 +7,12 @@ const ADMIN = config.permissionLevels.ADMIN;
 exports.minimumPermissionLevelRequired = required_permission_level => {
   return (req, res, next) => {
     let user_permission_level = parseInt(req.jwt.permissionLevel);
+
     let userId = req.jwt.userId;
     if (user_permission_level & required_permission_level) {
       return next();
     } else {
-      return res.status(403).send();
+      return res.status(403).send({ error: "Permission not granted" });
     }
   };
 };
@@ -25,8 +26,9 @@ exports.onlySameUserOrAdminCanDoThisAction = (req, res, next) => {
     if (user_permission_level & ADMIN) {
       return next();
     } else {
-      console.log("Not same user.");
-      return res.status(403).send();
+      return res
+        .status(403)
+        .send({ error: "Permission not granted and not same user" });
     }
   }
 };
@@ -37,6 +39,6 @@ exports.sameUserCantDoThisAction = (req, res, next) => {
   if (req.params.userId !== userId) {
     return next();
   } else {
-    return res.status(400).send();
+    return res.status(403).send({ error: "Not same user" });
   }
 };

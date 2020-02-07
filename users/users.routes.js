@@ -13,7 +13,6 @@ const FREE = config.permissionLevels.NORMAL_USER;
 router.get("/", [UsersController.list]);
 router.get("/:userId", [
   AuthMiddleware.validJWTNeeded,
-  PermissionsMiddleware.onlySameUserOrAdminCanDoThisAction,
   UsersController.getById
 ]);
 router.patch("/:userId", [

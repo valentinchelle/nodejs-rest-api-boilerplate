@@ -21,14 +21,13 @@ exports.insert = (req, res) => {
           // Calling the model to create the user
           User.create(newUser)
             .then(user => {
-              console.log("[i] User Created!");
               let userobject = user.toObject();
 
               delete userobject.password;
               res.json(userobject);
             })
             .catch(function(error) {
-              console.log(err);
+              throw err;
             });
         });
       });
@@ -54,22 +53,17 @@ exports.loginOAuth = (
   - cb_fail = callback function(err)
   */
   // We lookup if already exist
-  console.log("[i] Login via Oauth");
   User.findOne(
     { OAuthId: id_provider, OAuthProvider: provider, email: email },
     (err, userMatch) => {
       // handle errors here:
       if (err) {
-        console.log("[!] Error!! trying to find user with OAuth Id");
         return cb_fail(err);
       }
       // if there is already someone with that googleId
       if (userMatch) {
-        console.log("[i] User Found!");
         cb_success(userMatch);
       } else {
-        console.log("[i] Creating new user");
-        console.log(email);
         // creating the new user
         const newUser0Auth = {
           OAuthProvider: provider,
@@ -77,11 +71,11 @@ exports.loginOAuth = (
           name: name,
           familyname: familyName,
           profilePicture: picture,
-          email: email
+          email: email,
+          permissionLevel: 0
         };
         User.create(newUser0Auth)
           .then(user => {
-            console.log("[i] User Created!");
             cb_success(user);
           })
           .catch(function(error) {
@@ -108,16 +102,21 @@ exports.list = (req, res) => {
 };
 
 exports.getById = (req, res) => {
-  User.findById(req.params.userId).then(result => {
-    res.status(200).send(result);
-  });
+  User.findById(req.params.userId)
+    .then(result => {
+      return res.status(200).send(result);
+    })
+    .catch(err => {
+      return res
+        .status(400)
+        .send({ error: "Error. Probably Wrong id.", err: err });
+    });
 };
 
 exports.patchById = (req, res) => {
   // We make sure to not patch the permissionLevel and id
   delete req.body["permissionLevel"];
   delete req.body["id"];
-  console.log(req.jwt);
   // We make sure they try to modify themselves if they don't have the right permission
 
   var newUser = req.body;
@@ -129,20 +128,18 @@ exports.patchById = (req, res) => {
         newUser.password = hash;
 
         User.patch(req.params.userId, newUser).then(result => {
-          console.log(result);
-          res.status(204).send({});
+          res.status(200).send({});
         });
       });
     });
   } else {
     User.patch(req.params.userId, req.body).then(result => {
-      console.log(result);
-      res.status(204).send({});
+      res.status(200).send({});
     });
   }
 };
 exports.removeById = (req, res) => {
   User.removeById(req.params.userId).then(result => {
-    res.status(204).send({});
+    res.status(200).send({});
   });
 };

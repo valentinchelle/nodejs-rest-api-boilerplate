@@ -12,6 +12,7 @@ const ADMIN = config.permissionLevels.ADMIN;
 const PAID = config.permissionLevels.PAID_USER;
 const FREE = config.permissionLevels.NORMAL_USER;
 
+router.get("/feed/:page?", [PostsController.list]);
 router.get("/:id", [PostsController.getById]);
 router.post("/", [AuthMiddleware.validJWTNeeded, PostsController.insert]);
 router.patch("/:id", [
@@ -19,7 +20,5 @@ router.patch("/:id", [
   PostPermissionMiddleware.onlyAuthorOrAdminCanDoThisAction,
   PostsController.patchById
 ]);
-
-router.get("/feed/:page", [PostsController.list]);
 
 module.exports = router;

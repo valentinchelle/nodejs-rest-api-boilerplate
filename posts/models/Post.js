@@ -14,7 +14,7 @@ const EntitySchema = new Schema(
 
 EntitySchema.plugin(uniqueValidator, { message: "Is already taken" });
 
-EntitySchema.statics.create = dataEntity => {
+EntitySchema.statics.create = function(dataEntity) {
   const new_entity = new this(dataEntity);
   return new_entity.save();
 };
