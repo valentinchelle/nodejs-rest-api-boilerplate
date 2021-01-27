@@ -6,6 +6,20 @@
 </p>
 
 
+
+
+# Branch
+
+A boilerplate for **NodeJs** Rest Api. Implements a clean structure, with the best practices for authentication, including OAuth for _Google Login_ and _Facebook Login_.
+
+You probably know how hard it is to start a node js API, with a well structured and clean code. Especially if you are on a rush for an hackhaton or a school project.
+I give you here a clean code, that implements what is essential for a new API project : a clean nodejs structure implementing a user system following the best practices.
+
+You can directly plug this API with the client of your choice by calling the different endpoints. I also give details on how to extend this code to adapt it for your project.
+
+This API can be used with any client, here is the client I have developed with ReactJS to interact with this API.
+
+
 # NodeJs Api Boilerplate
 
 A boilerplate for **NodeJs** Rest Api. Implements a clean structure, with the best practices for authentication, including OAuth for _Google Login_ and _Facebook Login_.
