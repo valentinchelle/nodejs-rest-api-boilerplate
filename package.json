@@ -1,8 +1,11 @@
 {
-  "name": "mern-auth",
+  "name": "nodejs-rest-api-boilerplate",
   "version": "1.0.0",
-  "description": "Mern Auth Example",
+  "description": "NodeJS RestAPI",
   "main": "server.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "client-install": "npm install --prefix client",
     "start": "node server.js",
@@ -10,7 +13,7 @@
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "author": "",
+  "author": "Valentin Chelle",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
